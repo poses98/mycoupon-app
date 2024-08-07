@@ -6,9 +6,11 @@ import { Colors } from '@/constants/Colors';
 export default function Button({
   title,
   onPress,
+  disabled,
 }: {
   title: string;
   onPress: () => void;
+  disabled?: boolean;
 }) {
   return (
     <TouchableOpacity
@@ -21,8 +23,10 @@ export default function Button({
         borderColor: 'black',
         borderStyle: 'solid',
         borderRadius: 4,
+        opacity: disabled ? 0.5 : 1,
       }}
       onPress={onPress}
+      disabled={disabled}
     >
       <ThemedText type="button">{title}</ThemedText>
     </TouchableOpacity>
