@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   drawerText: {
     fontFamily: 'ArialRonded',
     color: '#fff',
-    fontSize: 24,
+    fontSize: 30,
   },
   logoutText: {
     fontSize: 18,
