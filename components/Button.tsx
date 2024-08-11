@@ -13,6 +13,8 @@ export default function Button({
   textColor,
   textWeight,
   borderRadius,
+  width,
+  marginVertical,
 }: {
   title: string;
   onPress: () => void;
@@ -23,6 +25,8 @@ export default function Button({
   textColor?: string;
   textWeight?: string;
   borderRadius?: number;
+  width?: number;
+  marginVertical?: number;
 }) {
   return (
     <TouchableOpacity
@@ -36,6 +40,8 @@ export default function Button({
         borderStyle: border ? 'solid' : undefined,
         borderRadius: borderRadius || 4,
         opacity: disabled ? 0.5 : 1,
+        width: width || '100%',
+        marginVertical: marginVertical || 0,
       }}
       onPress={onPress}
       disabled={disabled}
