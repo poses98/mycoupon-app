@@ -17,7 +17,6 @@ import { SafeAreaView, Text } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import CustomDrawerContent from '@/components/CustomDrawerContent';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -66,7 +65,7 @@ export default function RootLayout() {
                 drawerActiveTintColor: 'rgba(255, 255, 255, 0.1)',
                 drawerLabelStyle: {
                   color: '#fff',
-                  fontSize: 25,
+                  fontSize: 22,
                 },
                 drawerItemStyle: {
                   backgroundColor: 'transparent',
