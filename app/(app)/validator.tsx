@@ -74,12 +74,13 @@ export default function Validator() {
 
   return (
     <View style={styles.container}>
+      {/**TODO Go back X icon */}
       <ThemedText type="title" style={styles.title}>
         Escanea el cupón
       </ThemedText>
       <View style={styles.cameraContainer}>
         <CameraView
-          zoom={0.025}
+          zoom={0.03}
           barcodeScannerSettings={{
             barcodeTypes: ['qr'],
           }}
@@ -113,7 +114,8 @@ const styles = StyleSheet.create({
   qrCodeSquare: {
     position: 'absolute',
     borderWidth: 4,
-    borderColor: 'yellow',
+    borderColor: Colors.light.buttonYellow,
+    borderRadius: 10,
   },
   title: {
     fontFamily: 'ArialRonded',
@@ -136,7 +138,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.tint,
   },
   cameraContainer: {
-    borderRadius: 50,
+    borderRadius: 30,
+    borderColor: Colors.light.buttonYellow,
+    borderWidth: 4,
+    overflow: 'hidden',
     zIndex: 3,
   },
   message: {
