@@ -2,22 +2,18 @@ import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
 import {
   CameraView,
-  CameraType,
   useCameraPermissions,
   BarcodeScanningResult,
 } from 'expo-camera';
 import { Colors } from '@/constants/Colors';
 import Button from '@/components/Button';
 import { ThemedText } from '@/components/ThemedText';
-const { width, height } = Dimensions.get('window');
 
 export default function Validator() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -37,10 +33,7 @@ export default function Validator() {
     );
   }
 
-  const handleBarCodeRead = ({
-    bounds,
-    cornerPoints,
-  }: BarcodeScanningResult) => {
+  const handleBarCodeRead = ({ cornerPoints }: BarcodeScanningResult) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
