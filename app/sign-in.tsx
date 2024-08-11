@@ -59,7 +59,7 @@ export default function HomeScreen() {
                 textAlign: 'center',
               }}
             >
-              MyCoupon
+              {process.env.EXPO_PUBLIC_APP_NAME}
             </ThemedText>
           </View>
 
