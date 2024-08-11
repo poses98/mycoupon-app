@@ -88,7 +88,7 @@ export default function RootLayout() {
                 }}
               />
               <Drawer.Screen
-                name="validator"
+                name="(validator)"
                 options={{
                   title: 'Validador',
                   drawerLabel: 'Validador',

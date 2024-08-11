@@ -3,8 +3,8 @@
  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
-const tintColorLight = '#004613';
-const tintColorDark = '#FFC400';
+const tintColorLight = 'rgba(0, 70, 19, 1)';
+const tintColorDark = 'rgba(255, 196, 0, 1)';
 
 export const Colors = {
   light: {
@@ -21,6 +21,7 @@ export const Colors = {
     buttonYellow: '#FFC400',
     activeCoupon: '#0AA06E',
     redeemedCoupon: 'rgba(213, 43, 30, 0.5)',
+    inactiveIcon: 'rgba(0, 70, 19, 0.4)',
   },
   dark: {
     text: '#6D6D6D',
