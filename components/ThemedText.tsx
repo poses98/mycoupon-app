@@ -35,6 +35,7 @@ export function ThemedText({
         type === 'link' ? styles.link : undefined,
         type === 'form-label' ? styles.formLabel : undefined,
         type === 'button' ? styles.button : undefined,
+        type === 'button' ? styles.button : undefined,
 
         style,
       ]}
