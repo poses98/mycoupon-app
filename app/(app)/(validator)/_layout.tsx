@@ -4,7 +4,6 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { Tabs } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Entypo from '@expo/vector-icons/Entypo';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -42,7 +41,7 @@ export default function RootLayout() {
         options={{
           title: 'Historial',
           tabBarIcon: ({ color }) => (
-            <Entypo name="list" size={24} color={color} />
+            <AntDesign name="profile" size={24} color={color} />
           ),
         }}
       />
