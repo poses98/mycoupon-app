@@ -11,7 +11,6 @@ class CouponApi {
         Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
       }),
     });
-    console.log(request);
 
     try {
       const response = await fetch(request);
