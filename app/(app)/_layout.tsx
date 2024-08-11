@@ -66,7 +66,7 @@ export default function RootLayout() {
                 drawerActiveTintColor: 'rgba(255, 255, 255, 0.1)',
                 drawerLabelStyle: {
                   color: '#fff',
-                  fontSize: 18,
+                  fontSize: 25,
                 },
                 drawerItemStyle: {
                   backgroundColor: 'transparent',
