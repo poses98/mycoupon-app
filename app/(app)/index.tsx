@@ -1,30 +1,40 @@
 import MenuCard from '@/components/MenuCard';
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 
 export default function Home() {
+  const router = useRouter();
   return (
     <View style={styles.wrapper}>
       <ScrollView contentContainerStyle={styles.container}>
         <MenuCard
           icon={require('@/assets/icons/qr-code.png')}
           title="VALIDAR"
-          onClick={() => {}}
+          onClick={() => {
+            router.navigate('/validator');
+          }}
         />
         <MenuCard
           icon={require('@/assets/icons/voucher.png')}
           title="CUPONES"
-          onClick={() => {}}
+          onClick={() => {
+            router.navigate('/coupons');
+          }}
         />
         <MenuCard
           icon={require('@/assets/icons/change-management.png')}
           title="GESTIÓN"
-          onClick={() => {}}
+          onClick={() => {
+            router.navigate('/management');
+          }}
         />
         <MenuCard
           icon={require('@/assets/icons/question.png')}
           title="AYUDA"
-          onClick={() => {}}
+          onClick={() => {
+            router.navigate('/help');
+          }}
         />
       </ScrollView>
     </View>
