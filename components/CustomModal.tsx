@@ -1,6 +1,7 @@
 import { Modal, View, Text, Pressable, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Colors } from '@/constants/Colors';
+import { ThemedText } from './ThemedText';
 
 export default function CustomModal({
   isVisible,
@@ -23,7 +24,9 @@ export default function CustomModal({
     >
       <View style={styles.modalContent}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>{title}</Text>
+          <ThemedText type="subtitle" style={styles.title}>
+            {title}
+          </ThemedText>
           <Pressable onPress={onClose}>
             <MaterialIcons name="close" color="#000" size={22} />
           </Pressable>
@@ -36,14 +39,14 @@ export default function CustomModal({
 
 const styles = StyleSheet.create({
   modalContent: {
-    minHeight: '80%',
+    minHeight: '90%',
     height: 'auto',
     width: '100%',
     borderTopRightRadius: 18,
     borderTopLeftRadius: 18,
     position: 'absolute',
     bottom: 0,
-    backgroundColor: Colors.light.background,
+    backgroundColor: 'white',
   },
   titleContainer: {
     height: '7%',
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    color: '#000',
-    fontSize: 16,
+    color: Colors.light.tint,
+    fontSize: 22,
   },
 });
