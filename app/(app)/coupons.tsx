@@ -6,11 +6,14 @@ import CouponApi from '@/api/coupon';
 import ICoupon from '@/interfaces/ICoupon';
 import Loader from '@/components/Loader';
 import CouponContainer from '@/components/CouponContainer';
+import CustomModal from '@/components/CustomModal';
+import CreateCouponForm from '@/components/CreateCouponForm';
 
 export default function Coupons() {
   const [isLoading, setIsLoading] = useState(true);
   const [coupons, setCoupons] = useState<Array<ICoupon>>([]);
   const [couponsByDate, setCouponsByDate] = useState<any>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const getCoupons = async () => {
@@ -37,6 +40,24 @@ export default function Coupons() {
     }
   }, [coupons]);
 
+  const handleModalVisibility = (visible: boolean | null) => {
+    if (typeof visible === 'boolean') {
+      setIsModalVisible(visible);
+      return;
+    }
+    setIsModalVisible((prevState) => !prevState);
+  };
+
+  const handleFormSubmit = (formData: {
+    name: string;
+    description: string;
+    valid_from: Date;
+    valid_until: Date;
+    terms: string;
+  }) => {
+    console.log(formData);
+  };
+
   return (
     <View style={styles.wrapper}>
       {isLoading && <Loader />}
@@ -44,16 +65,20 @@ export default function Coupons() {
         <ScrollView contentContainerStyle={styles.container}>
           <Button
             title="GENERAR CUPONES"
-            onPress={() => {
-              /**TODO Open modal */
-              console.log('Create coupon pressed');
-            }}
+            onPress={() => handleModalVisibility(true)}
             bgcolor="#fff"
             borderColor={Colors.light.tint}
             textColor={Colors.light.tint}
             borderRadius={11}
             marginVertical={10}
           />
+          <CustomModal
+            title="Crear cupón"
+            isVisible={isModalVisible}
+            onClose={() => handleModalVisibility(false)}
+          >
+            <CreateCouponForm onSubmit={handleFormSubmit} />
+          </CustomModal>
           {Object.entries(couponsByDate).map(([date, couponsInADay]: any) => (
             <CouponContainer
               key={date}
