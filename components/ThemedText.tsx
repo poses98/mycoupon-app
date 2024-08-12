@@ -1,6 +1,7 @@
 import { Text, type TextProps, StyleSheet } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { Colors } from '@/constants/Colors';
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -66,9 +67,10 @@ const styles = StyleSheet.create({
     fontFamily: 'ArialRonded',
   },
   link: {
-    lineHeight: 30,
-    fontSize: 16,
-    color: '#0a7ea4',
+    fontSize: 11,
+    lineHeight: 13,
+    fontWeight: '600',
+    color: Colors.light.tint,
   },
   formLabel: { fontSize: 11, lineHeight: 13, fontWeight: '400' },
   button: {

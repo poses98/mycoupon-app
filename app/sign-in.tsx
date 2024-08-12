@@ -79,6 +79,7 @@ export default function HomeScreen() {
                       setUserData({ ...userData, username: text })
                     }
                     value={userData.username}
+                    autocapitalize="none"
                   />
                   <InputWithLabel
                     label="CONTRASEÑA"
@@ -88,6 +89,7 @@ export default function HomeScreen() {
                       setUserData({ ...userData, password: e })
                     }
                     value={userData.password}
+                    autocapitalize="none"
                   />
                 </View>
               )}

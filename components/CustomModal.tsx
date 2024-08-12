@@ -1,5 +1,6 @@
 import { Modal, View, Text, Pressable, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Colors } from '@/constants/Colors';
 
 export default function CustomModal({
   isVisible,
@@ -18,6 +19,7 @@ export default function CustomModal({
       transparent={true}
       collapsable
       visible={isVisible}
+      onRequestClose={onClose}
     >
       <View style={styles.modalContent}>
         <View style={styles.titleContainer}>
@@ -41,6 +43,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 18,
     position: 'absolute',
     bottom: 0,
+    backgroundColor: Colors.light.background,
   },
   titleContainer: {
     height: '7%',

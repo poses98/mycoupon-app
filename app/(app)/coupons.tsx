@@ -53,7 +53,7 @@ export default function Coupons() {
     description: string;
     valid_from: Date;
     valid_until: Date;
-    terms: string;
+    quantity: number;
   }) => {
     console.log(formData);
   };

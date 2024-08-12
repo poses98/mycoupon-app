@@ -3,6 +3,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Colors } from '@/constants/Colors';
+import React from 'react';
 
 export default function InputWithLabel({
   label,
@@ -10,34 +11,56 @@ export default function InputWithLabel({
   secureTextEntry,
   onChange,
   value,
+  autocapitalize,
+  labelComponent,
+  defaultValue,
+  placeholder,
+  inputComponent,
   ...rest
 }: {
-  label: string;
+  label?: string;
   icon?: any;
   secureTextEntry?: boolean;
-  onChange: any;
-  value: string;
+  onChange?: any;
+  value?: string | Date;
+  autocapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  labelComponent?: React.ReactElement;
+  defaultValue?: string;
+  placeholder?: string;
+  inputComponent?: React.ReactElement;
 }) {
   return (
     <View style={styles.container}>
-      <ThemedText type="form-label">{label}</ThemedText>
-      <View style={styles.inputField}>
-        <AntDesign name={icon} size={20} color="#848484" />
+      {label && !labelComponent && (
+        <ThemedText type="form-label">{label}</ThemedText>
+      )}
+      {label && labelComponent && (
+        <View style={styles.labelContainer}>
+          <ThemedText type="form-label">{label}</ThemedText>
+          {labelComponent}
+        </View>
+      )}
+      {!label && labelComponent && labelComponent}
 
-        <TextInput
-          style={{
-            borderRadius: 5,
-            fontSize: 16,
-            paddingLeft: icon ? 10 : 0,
-            width: '100%',
-          }}
-          autoCapitalize="none"
-          secureTextEntry={secureTextEntry}
-          clearButtonMode="while-editing"
-          onChangeText={onChange}
-          value={value}
-          {...rest}
-        />
+      <View style={!inputComponent ? styles.inputField : styles.inputContainer}>
+        <AntDesign name={icon} size={20} color="#848484" />
+        {inputComponent && inputComponent}
+        {!inputComponent && (
+          <TextInput
+            style={{
+              borderRadius: 5,
+              fontSize: 16,
+              paddingLeft: icon ? 10 : 0,
+              width: '100%',
+            }}
+            secureTextEntry={secureTextEntry}
+            clearButtonMode="while-editing"
+            onChangeText={onChange}
+            defaultValue={defaultValue ? defaultValue : ''}
+            placeholder={placeholder}
+            {...rest}
+          />
+        )}
       </View>
     </View>
   );
@@ -54,9 +77,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: Colors.light.inputTextBackground,
   },
+  inputContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingVertical: 5,
+  },
   container: {
     width: '100%',
     borderRadius: 2,
     marginBottom: 15,
+  },
+  labelContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+    alignContent: 'center',
   },
 });
