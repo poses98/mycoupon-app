@@ -16,9 +16,15 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 export default function CouponContainer({
   date,
   couponsInADay,
+  handleSelected,
+  setEditMode,
+  isEditMode,
 }: {
   date: string;
   couponsInADay: Array<ICoupon>;
+  handleSelected?: (id: string) => void;
+  setEditMode?: () => void;
+  isEditMode?: boolean;
 }) {
   const [isOpened, setIsOpened] = useState(false);
   const [heightAnim] = useState(new Animated.Value(0));
@@ -72,7 +78,15 @@ export default function CouponContainer({
         <FlatList
           data={couponsInADay}
           numColumns={4}
-          renderItem={({ item }) => <CouponCard key={item._id} coupon={item} />}
+          renderItem={({ item }) => (
+            <CouponCard
+              key={item._id}
+              coupon={item}
+              handleSelected={handleSelected}
+              isEditMode={isEditMode}
+              setEditMode={setEditMode}
+            />
+          )}
           keyExtractor={(item) => item._id}
           initialNumToRender={10}
           scrollEnabled={false}
