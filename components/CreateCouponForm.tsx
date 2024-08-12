@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '@/components/Button';
 import InputWithLabel from './InputWithLabel';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Colors } from '@/constants/Colors';
 import { ThemedText } from './ThemedText';
 import QuantitySetter from './QuantitySetter';
 
@@ -18,6 +11,7 @@ interface CouponFormProps {
   onSubmit: (formData: {
     name: string;
     description: string;
+    event?: string;
     valid_from: Date;
     valid_until: Date;
     quantity: number;
@@ -27,6 +21,7 @@ interface CouponFormProps {
 const CreateCouponForm: React.FC<CouponFormProps> = ({ onSubmit }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [event, setEvent] = useState('');
   const [validFrom, setValidFrom] = useState(new Date());
   const [validUntil, setValidUntil] = useState(new Date());
   const [quantity, setQuantity] = useState(1);
@@ -35,6 +30,7 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({ onSubmit }) => {
     const formData = {
       name,
       description,
+      event,
       valid_from: new Date(validFrom),
       valid_until: new Date(validUntil),
       quantity: quantity,
@@ -69,6 +65,12 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({ onSubmit }) => {
         value={description}
         onChange={setDescription}
         placeholder="Incluye: 1 McMenú Grande y 1 McFlurry"
+      />
+      <InputWithLabel
+        label="EVENTO (OPCIONAL)"
+        value={event}
+        onChange={setEvent}
+        placeholder="Carrera solidaria"
       />
       <InputWithLabel
         label="VÁLIDO DESDE"
@@ -147,9 +149,6 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({ onSubmit }) => {
       <Button
         title={quantity === 1 ? 'CREAR CUPÓN' : 'CREAR CUPONES'}
         onPress={handleSubmit}
-        bgcolor="#fff"
-        borderColor={Colors.light.tint}
-        textColor={Colors.light.tint}
         borderRadius={11}
         marginVertical={10}
       />
@@ -160,7 +159,7 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({ onSubmit }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: Colors.light.background,
+    backgroundColor: 'white',
   },
 });
 
