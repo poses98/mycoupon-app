@@ -22,6 +22,7 @@ export const Colors = {
     activeCoupon: '#0AA06E',
     redeemedCoupon: 'rgba(213, 43, 30, 0.5)',
     inactiveIcon: 'rgba(0, 70, 19, 0.4)',
+    selected: '#0094FF',
   },
   dark: {
     text: '#6D6D6D',
