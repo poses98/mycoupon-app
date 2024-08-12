@@ -19,6 +19,25 @@ class CouponApi {
       return error;
     }
   }
+  static async generateBatchCoupons(payload) {
+    const url = `${BASE_PATH}/${API_VERSION}/coupon-batch`;
+    const request = new Request(url, {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+      }),
+      body: JSON.stringify(payload),
+    });
+    console.log('request', request);
+
+    try {
+      const response = await fetch(request);
+      return await response.json();
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default CouponApi;
