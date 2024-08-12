@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native';
 import Button from '@/components/Button';
 import { Colors } from '@/constants/Colors';
 import CouponApi from '@/api/coupon';
@@ -8,20 +8,22 @@ import Loader from '@/components/Loader';
 import CouponContainer from '@/components/CouponContainer';
 import CustomModal from '@/components/CustomModal';
 import CreateCouponForm from '@/components/CreateCouponForm';
+import EditModeBar from '@/components/EditModeBar';
 
 export default function Coupons() {
   const [isLoading, setIsLoading] = useState(true);
   const [coupons, setCoupons] = useState<Array<ICoupon>>([]);
   const [couponsByDate, setCouponsByDate] = useState<any>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
     const getCoupons = async () => {
       const couponsFetch = await CouponApi.getCoupons();
       if (couponsFetch.length > 0) {
-        setIsLoading(false);
         setCoupons(couponsFetch);
       }
+      setIsLoading(false);
     };
     getCoupons();
   }, []);
@@ -48,20 +50,64 @@ export default function Coupons() {
     setIsModalVisible((prevState) => !prevState);
   };
 
-  const handleFormSubmit = (formData: {
+  const handleFormSubmit = async (formData: {
     name: string;
     description: string;
     valid_from: Date;
     valid_until: Date;
     quantity: number;
+    event?: string;
   }) => {
-    console.log(formData);
+    if (
+      !formData.name ||
+      !formData.description ||
+      !formData.valid_from ||
+      !formData.valid_until ||
+      !formData.quantity
+    ) {
+      Alert.alert('Error', 'Todos los campos son obligatorios');
+      return;
+    }
+    const payload = {
+      title: formData.name,
+      description: formData.description,
+      valid_from: formData.valid_from,
+      valid_until: formData.valid_until,
+      event: formData.event || 'GENERAL',
+      quantity: 1,
+    };
+
+    if (formData.quantity >= 1) {
+      payload.quantity = formData.quantity;
+      try {
+        const freshCoupons = await CouponApi.generateBatchCoupons(payload);
+        if (!freshCoupons) {
+          Alert.alert('Error', 'No se pudo generar los cupones');
+          return;
+        } else {
+          setCoupons([...freshCoupons, ...coupons]);
+          handleModalVisibility(false);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      Alert.alert('Error', 'La cantidad de cupones debe ser mayor a 0');
+    }
+  };
+
+  const handleSelected = (id: string) => {
+    console.log(`Selected coupon ${id}`);
   };
 
   return (
     <View style={styles.wrapper}>
       {isLoading && <Loader />}
-      {!isLoading && coupons.length > 0 && (
+      <EditModeBar
+        closeEditMode={() => setIsEditMode(false)}
+        isEditMode={isEditMode}
+      />
+      {!isLoading && (
         <ScrollView contentContainerStyle={styles.container}>
           <Button
             title="GENERAR CUPONES"
@@ -79,19 +125,19 @@ export default function Coupons() {
           >
             <CreateCouponForm onSubmit={handleFormSubmit} />
           </CustomModal>
-          {Object.entries(couponsByDate).map(([date, couponsInADay]: any) => (
-            <CouponContainer
-              key={date}
-              date={date}
-              couponsInADay={couponsInADay}
-            />
-          ))}
+          {coupons.length === 0 && <Text>No hay cupones</Text>}
+          {coupons.length > 0 &&
+            Object.entries(couponsByDate).map(([date, couponsInADay]: any) => (
+              <CouponContainer
+                key={date}
+                date={date}
+                couponsInADay={couponsInADay}
+                handleSelected={handleSelected}
+                setEditMode={() => setIsEditMode(true)}
+                isEditMode={isEditMode}
+              />
+            ))}
         </ScrollView>
-      )}
-      {!isLoading && coupons.length === 0 && (
-        <View>
-          <Text>No hay cupones</Text>
-        </View>
       )}
     </View>
   );
