@@ -28,7 +28,7 @@ export default function InputWithLabel({
           style={{
             borderRadius: 5,
             fontSize: 16,
-            paddingLeft: 10,
+            paddingLeft: icon ? 10 : 0,
             width: '100%',
           }}
           autoCapitalize="none"
