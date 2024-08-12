@@ -4,52 +4,90 @@ import { Colors } from '@/constants/Colors';
 import QRCode from 'react-qr-code';
 import { ThemedText } from '@/components/ThemedText';
 import ICoupon from '@/interfaces/ICoupon';
-import { red } from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
 import { CouponStatus } from '@/enums/CouponStatus';
+import { AntDesign } from '@expo/vector-icons';
 
-const CouponCard = React.memo(({ coupon }: { coupon: ICoupon }) => {
-  return (
-    <TouchableOpacity
-      key={coupon._id}
-      style={[
-        styles.couponCard,
-        coupon.status === CouponStatus.NOT_REDEEMED
-          ? styles.activeCoupon
-          : styles.redeemedCoupon,
-      ]}
-      onPress={() => {
-        console.log(`Coupon ${coupon._id} pressed`);
-      }}
-    >
-      <View
+const CouponCard = React.memo(
+  ({
+    coupon,
+    handleSelected,
+    setEditMode,
+    isEditMode,
+  }: {
+    coupon: ICoupon;
+    handleSelected?: (id: string) => void;
+    setEditMode?: () => void;
+    isEditMode?: boolean;
+  }) => {
+    const [isSelected, setIsSelected] = useState(false);
+
+    useEffect(() => {
+      if (!isEditMode) {
+        setIsSelected(false);
+      }
+    }, [isEditMode]);
+    return (
+      <TouchableOpacity
+        key={coupon._id}
         style={[
-          coupon.status === CouponStatus.REDEEMED ? styles.lowOpacity : {},
-          {
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
-          },
+          styles.couponCard,
+          coupon.status === CouponStatus.NOT_REDEEMED
+            ? styles.activeCoupon
+            : styles.redeemedCoupon,
+          isSelected ? styles.selected : {},
         ]}
+        onPress={() => {
+          if (isEditMode) {
+            setIsSelected((prev) => !prev);
+          }
+        }}
+        onLongPress={() => {
+          if (isEditMode) {
+            return;
+          }
+          setIsSelected((prev) => !prev);
+          if (setEditMode) {
+            setEditMode();
+          }
+          if (!handleSelected) return;
+          handleSelected(coupon._id);
+        }}
       >
-        {/**QR Code */}
-        <QRCode value={coupon._id} size={50} />
-        {/**UID */}
-        <ThemedText type="form-label" style={styles.couponIdText}>
-          {coupon._id}
-        </ThemedText>
-      </View>
-      {/**Title */}
-      <Text
-        style={[
-          styles.couponTitle,
-          coupon.status === CouponStatus.REDEEMED ? styles.lowOpacity : {},
-        ]}
-      >
-        {coupon.title}
-      </Text>
-    </TouchableOpacity>
-  );
-});
+        {isSelected && (
+          <View style={styles.selectedBadge}>
+            <AntDesign name="check" size={20} color={Colors.light.selected} />
+          </View>
+        )}
+        <View
+          style={[
+            coupon.status === CouponStatus.REDEEMED ? styles.lowOpacity : {},
+            {
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
+            },
+          ]}
+        >
+          {/**QR Code */}
+          <QRCode value={coupon._id} size={50} />
+          {/**UID */}
+          <ThemedText type="form-label" style={styles.couponIdText}>
+            {coupon._id}
+          </ThemedText>
+        </View>
+        {/**Title */}
+        <Text
+          style={[
+            styles.couponTitle,
+            coupon.status === CouponStatus.REDEEMED ? styles.lowOpacity : {},
+          ]}
+        >
+          {coupon.title}
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   couponCard: {
@@ -57,9 +95,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     minHeight: 122,
     borderRadius: 16,
-    paddingHorizontal: 10,
-    paddingTop: 13,
-    paddingBottom: 8,
     marginVertical: 5,
     marginHorizontal: 5,
     flexDirection: 'column',
@@ -67,7 +102,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     borderWidth: 1.4,
+    paddingHorizontal: 10,
+    paddingTop: 13,
+    paddingBottom: 8,
   },
+
   couponIdText: {
     fontSize: 5,
     color: Colors.light.tint,
@@ -85,6 +124,20 @@ const styles = StyleSheet.create({
   },
   lowOpacity: {
     opacity: 0.3,
+  },
+  selected: {
+    borderColor: Colors.light.selected,
+    borderWidth: 1.6,
+  },
+  selectedBadge: {
+    position: 'absolute',
+    top: -6,
+    right: -6,
+    borderRadius: 50,
+    backgroundColor: 'white',
+    borderColor: Colors.light.selected,
+    borderWidth: 1.6,
+    zIndex: 1,
   },
 });
 
