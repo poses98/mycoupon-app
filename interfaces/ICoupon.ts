@@ -12,5 +12,6 @@ export default interface ICoupon {
   redeemed_at: Date;
   created_by: string;
   redeemed_date: Date;
+  event: string;
   is_selected?: boolean;
 }
