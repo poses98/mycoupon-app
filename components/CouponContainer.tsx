@@ -20,6 +20,7 @@ export default function CouponContainer({
   setEditMode,
   isEditMode,
   selectedCoupons,
+  onPressCouponCard,
 }: {
   date: string;
   couponsInADay: Array<ICoupon>;
@@ -27,6 +28,7 @@ export default function CouponContainer({
   setEditMode?: () => void;
   isEditMode?: boolean;
   selectedCoupons?: Set<string>;
+  onPressCouponCard: (id: string) => void;
 }) {
   const [isOpened, setIsOpened] = useState(false);
   const [heightAnim] = useState(new Animated.Value(0));
@@ -85,8 +87,7 @@ export default function CouponContainer({
               key={item._id}
               coupon={item}
               handleSelected={handleSelected}
-              isEditMode={isEditMode}
-              setEditMode={setEditMode}
+              onPress={onPressCouponCard}
               isSelected={false}
             />
           )}
