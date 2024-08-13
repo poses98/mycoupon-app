@@ -7,11 +7,12 @@ export default interface ICoupon {
   terms: string;
   status: string;
   created_at: Date;
-  validated_by: string;
+  validated_by: any;
   is_valid_at: Array<string>;
-  redeemed_at: Date;
+  redeemed_at: any;
   created_by: string;
   redeemed_date: Date;
   event: string;
   is_selected?: boolean;
+  redeemed?: boolean;
 }

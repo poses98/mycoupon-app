@@ -21,6 +21,8 @@ export const Colors = {
     buttonYellow: '#FFC400',
     activeCoupon: '#0AA06E',
     redeemedCoupon: 'rgba(213, 43, 30, 0.5)',
+    redeemedBg: '#D52B1E',
+    validBg: '#0AA06E',
     inactiveIcon: 'rgba(0, 70, 19, 0.4)',
     selected: '#0094FF',
   },
