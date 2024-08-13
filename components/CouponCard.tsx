@@ -11,14 +11,12 @@ const CouponCard = React.memo(
   ({
     coupon,
     handleSelected,
-    setEditMode,
-    isEditMode,
+    onPress,
     isSelected,
   }: {
     coupon: ICoupon;
     handleSelected?: (id: string) => void;
-    setEditMode?: () => void;
-    isEditMode?: boolean;
+    onPress: (id: string) => void;
     isSelected?: boolean;
   }) => {
     const memoizedQRCode = useMemo(() => {
@@ -34,8 +32,9 @@ const CouponCard = React.memo(
             : styles.redeemedCoupon,
           isSelected ? styles.selected : {},
         ]}
-        onPress={() => {}}
-        onLongPress={() => {}}
+        onPress={() => {
+          onPress(coupon._id);
+        }}
       >
         {isSelected && (
           <View style={styles.selectedBadge}>
