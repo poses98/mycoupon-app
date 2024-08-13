@@ -1,13 +1,26 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import {
   CameraView,
   useCameraPermissions,
   BarcodeScanningResult,
+  Point,
 } from 'expo-camera';
+import { ObjectId } from 'bson';
 import { Colors } from '@/constants/Colors';
 import Button from '@/components/Button';
 import { ThemedText } from '@/components/ThemedText';
+import CouponApi from '@/api/coupon';
+import CouponValidation from '@/components/CouponValidation';
+import ICoupon from '@/interfaces/ICoupon';
+import { CouponStatus } from '@/enums/CouponStatus';
 
 export default function Validator() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -18,6 +31,11 @@ export default function Validator() {
     height: number;
   } | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [busyRead, setBusyRead] = useState(false);
+  const [scannedCoupon, setScannedCoupon] = useState<ICoupon | undefined>(
+    undefined
+  );
+  const [isCouponRedeemed, setIsCouponRedeemed] = useState(true);
 
   if (!permission) {
     return (
@@ -27,7 +45,59 @@ export default function Validator() {
     );
   }
 
-  const handleBarCodeRead = ({ cornerPoints }: BarcodeScanningResult) => {
+  const handleBarCodeRead = async ({
+    data,
+    cornerPoints,
+  }: BarcodeScanningResult) => {
+    if (busyRead) {
+      console.log(busyRead);
+      return;
+    }
+    handleSquare(cornerPoints);
+    checkCoupon(data);
+  };
+
+  const checkCoupon = async (data: string) => {
+    try {
+      setBusyRead(true);
+      if (!ObjectId.isValid(data)) {
+        throw new Error('Código QR inválido');
+      }
+
+      /**Get coupon */
+      const storedCoupon = await CouponApi.getCouponById(data);
+      if (storedCoupon === null) {
+        throw new Error('Coupon not found');
+      }
+      /**If status is redeemed then show red screen */
+      const couponRedeemed = storedCoupon.status === CouponStatus.REDEEMED;
+      setIsCouponRedeemed(couponRedeemed);
+      if (!couponRedeemed) {
+        /**Else validate and show the validation screen */
+        const couponValidation = await CouponApi.validateCoupon({
+          couponId: data,
+        });
+        if (couponValidation === null) {
+          throw new Error('Coupon not found');
+        }
+        setScannedCoupon(couponValidation);
+      } else {
+        setScannedCoupon(storedCoupon);
+      }
+    } catch (err: any) {
+      Alert.alert('Error', err.toString(), [
+        {
+          text: 'OK',
+          onPress: () => {
+            setBusyRead(false);
+            setScannedCoupon(undefined);
+          },
+        },
+      ]);
+    }
+  };
+
+  const handleSquare = (cornerPoints: Point[]) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -60,36 +130,61 @@ export default function Validator() {
   }
 
   return (
-    <View style={styles.container}>
-      {/**TODO Go back X icon */}
-      <ThemedText type="title" style={styles.title}>
-        Escanea el cupón
-      </ThemedText>
-      <View style={styles.cameraContainer}>
-        <CameraView
-          zoom={0.03}
-          barcodeScannerSettings={{
-            barcodeTypes: ['qr'],
-          }}
-          onBarcodeScanned={handleBarCodeRead}
-          style={styles.camera}
-          facing={'back'}
-        />
-        {qrCodeBounds && (
-          <View
-            style={[
-              styles.qrCodeSquare,
-              {
-                left: qrCodeBounds.left,
-                top: qrCodeBounds.top,
-                width: qrCodeBounds.width,
-                height: qrCodeBounds.height,
-              },
-            ]}
-          />
+    <>
+      <View style={styles.container}>
+        {scannedCoupon === undefined && (
+          <>
+            <ThemedText type="title" style={styles.title}>
+              Escanea el cupón
+            </ThemedText>
+            <View style={styles.cameraContainer}>
+              <CameraView
+                zoom={0.03}
+                barcodeScannerSettings={{
+                  barcodeTypes: ['qr'],
+                }}
+                onBarcodeScanned={handleBarCodeRead}
+                style={styles.camera}
+                facing={'back'}
+              />
+              {qrCodeBounds && (
+                <View
+                  style={[
+                    styles.qrCodeSquare,
+                    {
+                      left: qrCodeBounds.left,
+                      top: qrCodeBounds.top,
+                      width: qrCodeBounds.width,
+                      height: qrCodeBounds.height,
+                    },
+                  ]}
+                />
+              )}
+            </View>
+          </>
         )}
       </View>
-    </View>
+      <TouchableOpacity
+        onPress={() => {
+          setBusyRead(false);
+          setScannedCoupon(undefined);
+          setIsCouponRedeemed(false);
+        }}
+      >
+        <Text>RESET</Text>
+      </TouchableOpacity>
+      {scannedCoupon !== undefined && (
+        <CouponValidation
+          coupon={scannedCoupon}
+          redeemed={isCouponRedeemed}
+          handleClose={() => {
+            setBusyRead(false);
+            setScannedCoupon(undefined);
+            setIsCouponRedeemed(false);
+          }}
+        />
+      )}
+    </>
   );
 }
 const styles = StyleSheet.create({
