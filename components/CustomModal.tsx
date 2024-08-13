@@ -14,7 +14,7 @@ export default function CustomModal({
   children: React.ReactNode;
   onClose: () => void;
   title: string;
-  height?: number;
+  height: boolean;
 }) {
   return (
     <Modal
@@ -24,7 +24,7 @@ export default function CustomModal({
       visible={isVisible}
       onRequestClose={onClose}
     >
-      <View style={[styles.modalContent, height ? { height: height } : {}]}>
+      <View style={[styles.modalContent, height ? { height: 'auto' } : {}]}>
         <View style={styles.titleContainer}>
           <ThemedText type="subtitle" style={styles.title}>
             {title}
@@ -41,17 +41,17 @@ export default function CustomModal({
 
 const styles = StyleSheet.create({
   modalContent: {
-    minHeight: '90%',
-    height: 'auto',
+    height: '90%',
     width: '100%',
     borderTopRightRadius: 18,
     borderTopLeftRadius: 18,
     position: 'absolute',
     bottom: 0,
     backgroundColor: 'white',
+    paddingBottom: 20,
   },
   titleContainer: {
-    height: '7%',
+    height: 50,
     backgroundColor: 'white',
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
