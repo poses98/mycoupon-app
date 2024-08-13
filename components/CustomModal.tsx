@@ -8,11 +8,13 @@ export default function CustomModal({
   children,
   onClose,
   title,
+  height,
 }: {
   isVisible: boolean;
   children: React.ReactNode;
   onClose: () => void;
   title: string;
+  height?: number;
 }) {
   return (
     <Modal
@@ -22,7 +24,7 @@ export default function CustomModal({
       visible={isVisible}
       onRequestClose={onClose}
     >
-      <View style={styles.modalContent}>
+      <View style={[styles.modalContent, height ? { height: height } : {}]}>
         <View style={styles.titleContainer}>
           <ThemedText type="subtitle" style={styles.title}>
             {title}
