@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/ThemedText';
 import ICoupon from '@/interfaces/ICoupon';
 import { CouponStatus } from '@/enums/CouponStatus';
 import { AntDesign } from '@expo/vector-icons';
+import Button from './Button';
 
 export default function CouponVisualizer({ coupon }: { coupon: ICoupon }) {
   const redeemed = coupon.status === CouponStatus.REDEEMED;
@@ -13,8 +14,17 @@ export default function CouponVisualizer({ coupon }: { coupon: ICoupon }) {
   const memoizedQRCode = useMemo(() => {
     return <QRCode value={coupon._id} size={50} />;
   }, [coupon._id]);
+  console.log('Rendering coupon');
+
   return (
     <View style={styles.container}>
+      <View>
+        <AntDesign
+          name="dropbox"
+          size={24}
+          color={Colors.light.redeemedCoupon}
+        />
+      </View>
       <ThemedText
         type="subtitle"
         style={redeemed ? styles.redeemedText : styles.notRedeemedText}
@@ -27,6 +37,7 @@ export default function CouponVisualizer({ coupon }: { coupon: ICoupon }) {
       <ThemedText type="default">{coupon.description}</ThemedText>
       <ThemedText type="form-label">Evento:</ThemedText>
       <ThemedText type="default">{coupon.event}</ThemedText>
+      <Button title="COMPARTIR" onPress={() => console.log('COMPARTIR')} />
     </View>
   );
 }
