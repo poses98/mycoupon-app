@@ -154,6 +154,7 @@ export default function Coupons() {
               handleModalVisibility(false);
               setShowingCoupon(undefined);
             }}
+            height={showingCoupon !== undefined}
           >
             {showingCoupon === undefined && (
               <CreateCouponForm onSubmit={handleFormSubmit} />
