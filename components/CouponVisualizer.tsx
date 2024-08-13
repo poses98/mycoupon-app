@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
+    marginBottom: 20,
   },
   redeemedText: { color: Colors.light.redeemedCoupon, marginVertical: 10 },
   notRedeemedText: { color: Colors.light.tint, marginVertical: 10 },
