@@ -45,7 +45,11 @@ export default function CouponVisualizer({ coupon }: { coupon: ICoupon }) {
         <ThemedText type="default">{coupon.event}</ThemedText>
       </View>
 
-      <Button title="COMPARTIR" onPress={() => console.log('COMPARTIR')} />
+      <Button
+        title="COMPARTIR"
+        onPress={() => console.log('COMPARTIR')}
+        disabled={coupon.status === CouponStatus.REDEEMED}
+      />
     </View>
   );
 }
@@ -64,8 +68,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 20,
   },
-  redeemedText: { color: Colors.light.redeemedCoupon },
-  notRedeemedText: { color: Colors.light.tint },
+  redeemedText: { color: Colors.light.redeemedCoupon, marginVertical: 10 },
+  notRedeemedText: { color: Colors.light.tint, marginVertical: 10 },
   infoContainer: {
     width: '100%',
     flexDirection: 'column',
@@ -76,6 +80,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     lineHeight: 40,
+    color: Colors.light.tint,
   },
   description: {
     fontSize: 17,
