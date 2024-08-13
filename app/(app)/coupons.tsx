@@ -152,7 +152,9 @@ export default function Coupons() {
             isVisible={isModalVisible}
             onClose={() => {
               handleModalVisibility(false);
-              setShowingCoupon(undefined);
+              setTimeout(() => {
+                setShowingCoupon(undefined);
+              }, 500);
             }}
             height={showingCoupon !== undefined}
           >
