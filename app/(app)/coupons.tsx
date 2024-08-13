@@ -9,6 +9,7 @@ import CouponContainer from '@/components/CouponContainer';
 import CustomModal from '@/components/CustomModal';
 import CreateCouponForm from '@/components/CreateCouponForm';
 import EditModeBar from '@/components/EditModeBar';
+import CouponVisualizer from '@/components/CouponVisualizer';
 
 export default function Coupons() {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,6 +20,8 @@ export default function Coupons() {
   const [selectedCoupons, setSelectedCoupons] = useState<Set<string>>(
     new Set()
   );
+  const [showingCoupon, setShowingCoupon] = useState<ICoupon | undefined>();
+  const [modalTitle, setModalTitle] = useState('');
 
   useEffect(() => {
     const getCoupons = async () => {
@@ -116,6 +119,12 @@ export default function Coupons() {
     });
   };
 
+  const onPressCouponCard = (id: string) => {
+    setShowingCoupon(coupons.filter((coupon) => coupon._id == id)[0]);
+    setIsModalVisible(true);
+    setModalTitle('Cupón');
+  };
+
   return (
     <View style={styles.wrapper}>
       {isLoading && <Loader />}
@@ -127,7 +136,11 @@ export default function Coupons() {
         <ScrollView contentContainerStyle={styles.container}>
           <Button
             title="GENERAR CUPONES"
-            onPress={() => handleModalVisibility(true)}
+            onPress={() => {
+              handleModalVisibility(true);
+              setShowingCoupon(undefined);
+              setModalTitle('Crear Cupón');
+            }}
             bgcolor="#fff"
             borderColor={Colors.light.tint}
             textColor={Colors.light.tint}
@@ -135,12 +148,21 @@ export default function Coupons() {
             marginVertical={10}
           />
           <CustomModal
-            title="Crear cupón"
+            title={modalTitle}
             isVisible={isModalVisible}
-            onClose={() => handleModalVisibility(false)}
+            onClose={() => {
+              handleModalVisibility(false);
+              setShowingCoupon(undefined);
+            }}
           >
-            <CreateCouponForm onSubmit={handleFormSubmit} />
+            {showingCoupon === undefined && (
+              <CreateCouponForm onSubmit={handleFormSubmit} />
+            )}
+            {showingCoupon !== undefined && (
+              <CouponVisualizer coupon={showingCoupon} />
+            )}
           </CustomModal>
+
           {coupons.length === 0 && <Text>No hay cupones</Text>}
           {coupons.length > 0 &&
             Object.entries(couponsByDate).map(([date, couponsInADay]: any) => (
@@ -152,6 +174,7 @@ export default function Coupons() {
                 setEditMode={() => setIsEditMode(true)}
                 isEditMode={isEditMode}
                 selectedCoupons={selectedCoupons}
+                onPressCouponCard={onPressCouponCard}
               />
             ))}
         </ScrollView>
