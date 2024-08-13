@@ -19,12 +19,14 @@ export default function CouponContainer({
   handleSelected,
   setEditMode,
   isEditMode,
+  selectedCoupons,
 }: {
   date: string;
   couponsInADay: Array<ICoupon>;
   handleSelected?: (id: string) => void;
   setEditMode?: () => void;
   isEditMode?: boolean;
+  selectedCoupons?: Set<string>;
 }) {
   const [isOpened, setIsOpened] = useState(false);
   const [heightAnim] = useState(new Animated.Value(0));
@@ -85,6 +87,7 @@ export default function CouponContainer({
               handleSelected={handleSelected}
               isEditMode={isEditMode}
               setEditMode={setEditMode}
+              isSelected={false}
             />
           )}
           keyExtractor={(item) => item._id}

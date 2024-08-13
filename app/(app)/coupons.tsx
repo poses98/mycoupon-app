@@ -16,6 +16,9 @@ export default function Coupons() {
   const [couponsByDate, setCouponsByDate] = useState<any>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedCoupons, setSelectedCoupons] = useState<Set<string>>(
+    new Set()
+  );
 
   useEffect(() => {
     const getCoupons = async () => {
@@ -85,7 +88,12 @@ export default function Coupons() {
           Alert.alert('Error', 'No se pudo generar los cupones');
           return;
         } else {
-          setCoupons([...freshCoupons, ...coupons]);
+          console.log(freshCoupons);
+          if (coupons.length > 0) {
+            setCoupons([...freshCoupons, ...coupons]);
+          } else {
+            setCoupons(freshCoupons);
+          }
           handleModalVisibility(false);
         }
       } catch (e) {
@@ -97,7 +105,15 @@ export default function Coupons() {
   };
 
   const handleSelected = (id: string) => {
-    console.log(`Selected coupon ${id}`);
+    setSelectedCoupons((prevSelectedCoupons) => {
+      const newSelectedCoupons = new Set(prevSelectedCoupons);
+      if (newSelectedCoupons.has(id)) {
+        newSelectedCoupons.delete(id);
+      } else {
+        newSelectedCoupons.add(id);
+      }
+      return newSelectedCoupons;
+    });
   };
 
   return (
@@ -135,6 +151,7 @@ export default function Coupons() {
                 handleSelected={handleSelected}
                 setEditMode={() => setIsEditMode(true)}
                 isEditMode={isEditMode}
+                selectedCoupons={selectedCoupons}
               />
             ))}
         </ScrollView>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import QRCode from 'react-qr-code';
@@ -13,19 +13,17 @@ const CouponCard = React.memo(
     handleSelected,
     setEditMode,
     isEditMode,
+    isSelected,
   }: {
     coupon: ICoupon;
     handleSelected?: (id: string) => void;
     setEditMode?: () => void;
     isEditMode?: boolean;
+    isSelected?: boolean;
   }) => {
-    const [isSelected, setIsSelected] = useState(false);
-
-    useEffect(() => {
-      if (!isEditMode) {
-        setIsSelected(false);
-      }
-    }, [isEditMode]);
+    const memoizedQRCode = useMemo(() => {
+      return <QRCode value={coupon._id} size={50} />;
+    }, [coupon._id]);
     return (
       <TouchableOpacity
         key={coupon._id}
@@ -36,22 +34,8 @@ const CouponCard = React.memo(
             : styles.redeemedCoupon,
           isSelected ? styles.selected : {},
         ]}
-        onPress={() => {
-          if (isEditMode) {
-            setIsSelected((prev) => !prev);
-          }
-        }}
-        onLongPress={() => {
-          if (isEditMode) {
-            return;
-          }
-          setIsSelected((prev) => !prev);
-          if (setEditMode) {
-            setEditMode();
-          }
-          if (!handleSelected) return;
-          handleSelected(coupon._id);
-        }}
+        onPress={() => {}}
+        onLongPress={() => {}}
       >
         {isSelected && (
           <View style={styles.selectedBadge}>
@@ -69,7 +53,7 @@ const CouponCard = React.memo(
           ]}
         >
           {/**QR Code */}
-          <QRCode value={coupon._id} size={50} />
+          {memoizedQRCode}
           {/**UID */}
           <ThemedText type="form-label" style={styles.couponIdText}>
             {coupon._id}
