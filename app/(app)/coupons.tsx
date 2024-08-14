@@ -11,18 +11,13 @@ import CreateCouponForm from '@/components/CreateCouponForm';
 import EditModeBar from '@/components/EditModeBar';
 import CouponVisualizer from '@/components/CouponVisualizer';
 import { CouponStatus } from '@/enums/CouponStatus';
+import CouponList from '@/components/CouponList';
 
 export default function Coupons() {
   const [isLoading, setIsLoading] = useState(true);
   const [coupons, setCoupons] = useState<Array<ICoupon>>([]);
-  const [couponsByDate, setCouponsByDate] = useState<any>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedCoupons, setSelectedCoupons] = useState<Set<string>>(
-    new Set()
-  );
-  const [showingCoupon, setShowingCoupon] = useState<ICoupon | undefined>();
-  const [modalTitle, setModalTitle] = useState('');
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 
   useEffect(() => {
@@ -35,35 +30,6 @@ export default function Coupons() {
     };
     getCoupons();
   }, []);
-
-  useEffect(() => {
-    if (coupons.length > 0) {
-      const couponDate: {
-        [date: string]: {
-          coupons: Array<ICoupon>;
-          redeemed: number;
-          not_redeemed: number;
-        };
-      } = {};
-      coupons.forEach((coupon) => {
-        const date = coupon.created_at.toString().split('T')[0];
-        if (!couponDate[date]) {
-          couponDate[date] = {
-            coupons: [],
-            redeemed: 0,
-            not_redeemed: 0,
-          };
-        }
-        if (coupon.status === CouponStatus.REDEEMED) {
-          couponDate[date].redeemed++;
-        } else {
-          couponDate[date].not_redeemed++;
-        }
-        couponDate[date].coupons.push(coupon);
-      });
-      setCouponsByDate(couponDate);
-    }
-  }, [coupons]);
 
   const handleModalVisibility = (visible: boolean | null) => {
     if (typeof visible === 'boolean') {
@@ -111,7 +77,6 @@ export default function Coupons() {
           Alert.alert('Error', 'No se pudo generar los cupones');
           return;
         } else {
-          console.log(freshCoupons);
           if (coupons.length > 0) {
             setCoupons([...freshCoupons, ...coupons]);
           } else {
@@ -130,24 +95,6 @@ export default function Coupons() {
     }
   };
 
-  const handleSelected = (id: string) => {
-    setSelectedCoupons((prevSelectedCoupons) => {
-      const newSelectedCoupons = new Set(prevSelectedCoupons);
-      if (newSelectedCoupons.has(id)) {
-        newSelectedCoupons.delete(id);
-      } else {
-        newSelectedCoupons.add(id);
-      }
-      return newSelectedCoupons;
-    });
-  };
-
-  const onPressCouponCard = (id: string) => {
-    setShowingCoupon(coupons.filter((coupon) => coupon._id == id)[0]);
-    setIsModalVisible(true);
-    setModalTitle('Cupón');
-  };
-
   return (
     <View style={styles.wrapper}>
       {isLoading && <Loader />}
@@ -161,8 +108,6 @@ export default function Coupons() {
             title="GENERAR CUPONES"
             onPress={() => {
               handleModalVisibility(true);
-              setShowingCoupon(undefined);
-              setModalTitle('Crear Cupón');
             }}
             bgcolor="#fff"
             borderColor={Colors.light.tint}
@@ -171,43 +116,18 @@ export default function Coupons() {
             marginVertical={10}
           />
           <CustomModal
-            title={modalTitle}
+            title={'Crear Cupón'}
             isVisible={isModalVisible}
             onClose={() => {
               handleModalVisibility(false);
-              setTimeout(() => {
-                setShowingCoupon(undefined);
-              }, 500);
             }}
-            height={showingCoupon !== undefined}
           >
-            {showingCoupon === undefined && (
-              <CreateCouponForm
-                onSubmit={handleFormSubmit}
-                isSubmittingForm={isSubmittingForm}
-              />
-            )}
-            {showingCoupon !== undefined && (
-              <CouponVisualizer coupon={showingCoupon} />
-            )}
+            <CreateCouponForm
+              onSubmit={handleFormSubmit}
+              isSubmittingForm={isSubmittingForm}
+            />
           </CustomModal>
-          {/**TODO center this text on screen */}
-          {coupons.length === 0 && <Text>No hay cupones</Text>}
-          {coupons.length > 0 &&
-            Object.entries(couponsByDate).map(([date, couponsInADay]: any) => (
-              <CouponContainer
-                key={date}
-                date={date}
-                couponsInADay={couponsInADay.coupons}
-                activeCoupons={couponsInADay.not_redeemed}
-                redeemedCoupons={couponsInADay.redeemed}
-                handleSelected={handleSelected}
-                setEditMode={() => setIsEditMode(true)}
-                isEditMode={isEditMode}
-                selectedCoupons={selectedCoupons}
-                onPressCouponCard={onPressCouponCard}
-              />
-            ))}
+          <CouponList coupons={coupons} />
         </ScrollView>
       )}
     </View>
