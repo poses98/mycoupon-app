@@ -23,6 +23,7 @@ export default function Coupons() {
   );
   const [showingCoupon, setShowingCoupon] = useState<ICoupon | undefined>();
   const [modalTitle, setModalTitle] = useState('');
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 
   useEffect(() => {
     const getCoupons = async () => {
@@ -90,6 +91,7 @@ export default function Coupons() {
       Alert.alert('Error', 'Todos los campos son obligatorios');
       return;
     }
+    setIsSubmittingForm(true);
     const payload = {
       title: formData.name,
       description: formData.description,
@@ -103,6 +105,8 @@ export default function Coupons() {
       payload.quantity = formData.quantity;
       try {
         const freshCoupons = await CouponApi.generateBatchCoupons(payload);
+        setIsSubmittingForm(false);
+
         if (!freshCoupons) {
           Alert.alert('Error', 'No se pudo generar los cupones');
           return;
@@ -116,9 +120,12 @@ export default function Coupons() {
           handleModalVisibility(false);
         }
       } catch (e) {
+        setIsSubmittingForm(false);
+        Alert.alert('Error', 'No se pudo generar los cupones');
         console.log(e);
       }
     } else {
+      setIsSubmittingForm(false);
       Alert.alert('Error', 'La cantidad de cupones debe ser mayor a 0');
     }
   };
@@ -175,7 +182,10 @@ export default function Coupons() {
             height={showingCoupon !== undefined}
           >
             {showingCoupon === undefined && (
-              <CreateCouponForm onSubmit={handleFormSubmit} />
+              <CreateCouponForm
+                onSubmit={handleFormSubmit}
+                isSubmittingForm={isSubmittingForm}
+              />
             )}
             {showingCoupon !== undefined && (
               <CouponVisualizer coupon={showingCoupon} />

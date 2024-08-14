@@ -16,17 +16,23 @@ interface CouponFormProps {
     valid_until: Date;
     quantity: number;
   }) => void;
+  isSubmittingForm: boolean;
 }
 
-const CreateCouponForm: React.FC<CouponFormProps> = ({ onSubmit }) => {
+const CreateCouponForm: React.FC<CouponFormProps> = ({
+  onSubmit,
+  isSubmittingForm,
+}) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [event, setEvent] = useState('');
   const [validFrom, setValidFrom] = useState(new Date());
   const [validUntil, setValidUntil] = useState(new Date());
   const [quantity, setQuantity] = useState(1);
+  const [submitSent, setSubmitSent] = useState(false);
 
   const handleSubmit = () => {
+    setSubmitSent(true);
     const formData = {
       name,
       description,
@@ -37,6 +43,9 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({ onSubmit }) => {
     };
 
     onSubmit(formData);
+    setTimeout(() => {
+      setSubmitSent(false);
+    }, 1000);
   };
 
   const handleQuantityChange = (quantity: number) => {
@@ -151,6 +160,7 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({ onSubmit }) => {
         onPress={handleSubmit}
         borderRadius={11}
         marginVertical={10}
+        disabled={isSubmittingForm || submitSent}
       />
     </ScrollView>
   );
