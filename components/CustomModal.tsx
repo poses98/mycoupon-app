@@ -14,7 +14,7 @@ export default function CustomModal({
   children: React.ReactNode;
   onClose: () => void;
   title: string;
-  height: boolean;
+  height?: boolean;
 }) {
   return (
     <Modal
