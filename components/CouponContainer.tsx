@@ -21,6 +21,8 @@ export default function CouponContainer({
   isEditMode,
   selectedCoupons,
   onPressCouponCard,
+  activeCoupons,
+  redeemedCoupons,
 }: {
   date: string;
   couponsInADay: Array<ICoupon>;
@@ -29,6 +31,8 @@ export default function CouponContainer({
   isEditMode?: boolean;
   selectedCoupons?: Set<string>;
   onPressCouponCard: (id: string) => void;
+  activeCoupons: number;
+  redeemedCoupons: number;
 }) {
   const [isOpened, setIsOpened] = useState(false);
   const [heightAnim] = useState(new Animated.Value(0));
@@ -75,6 +79,26 @@ export default function CouponContainer({
           }}
         >
           {date}
+        </ThemedText>
+        <ThemedText
+          type="default"
+          style={{
+            marginLeft: 4,
+            color: Colors.light.activeCoupon,
+            fontSize: 12,
+          }}
+        >
+          {`ACTIVOS(${activeCoupons})`}
+        </ThemedText>
+        <ThemedText
+          type="default"
+          style={{
+            marginLeft: 4,
+            color: Colors.light.redeemedBg,
+            fontSize: 12,
+          }}
+        >
+          {`CANJEADOS(${redeemedCoupons})`}
         </ThemedText>
       </TouchableOpacity>
       <Animated.View style={[styles.couponContainer, { maxHeight }]}>

@@ -10,6 +10,7 @@ import CustomModal from '@/components/CustomModal';
 import CreateCouponForm from '@/components/CreateCouponForm';
 import EditModeBar from '@/components/EditModeBar';
 import CouponVisualizer from '@/components/CouponVisualizer';
+import { CouponStatus } from '@/enums/CouponStatus';
 
 export default function Coupons() {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,13 +37,28 @@ export default function Coupons() {
 
   useEffect(() => {
     if (coupons.length > 0) {
-      const couponDate: { [date: string]: Array<ICoupon> } = {};
+      const couponDate: {
+        [date: string]: {
+          coupons: Array<ICoupon>;
+          redeemed: number;
+          not_redeemed: number;
+        };
+      } = {};
       coupons.forEach((coupon) => {
         const date = coupon.created_at.toString().split('T')[0];
         if (!couponDate[date]) {
-          couponDate[date] = [];
+          couponDate[date] = {
+            coupons: [],
+            redeemed: 0,
+            not_redeemed: 0,
+          };
         }
-        couponDate[date].push(coupon);
+        if (coupon.status === CouponStatus.REDEEMED) {
+          couponDate[date].redeemed++;
+        } else {
+          couponDate[date].not_redeemed++;
+        }
+        couponDate[date].coupons.push(coupon);
       });
       setCouponsByDate(couponDate);
     }
@@ -165,14 +181,16 @@ export default function Coupons() {
               <CouponVisualizer coupon={showingCoupon} />
             )}
           </CustomModal>
-
+          {/**TODO center this text on screen */}
           {coupons.length === 0 && <Text>No hay cupones</Text>}
           {coupons.length > 0 &&
             Object.entries(couponsByDate).map(([date, couponsInADay]: any) => (
               <CouponContainer
                 key={date}
                 date={date}
-                couponsInADay={couponsInADay}
+                couponsInADay={couponsInADay.coupons}
+                activeCoupons={couponsInADay.not_redeemed}
+                redeemedCoupons={couponsInADay.redeemed}
                 handleSelected={handleSelected}
                 setEditMode={() => setIsEditMode(true)}
                 isEditMode={isEditMode}
