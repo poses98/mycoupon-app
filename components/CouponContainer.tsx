@@ -12,6 +12,7 @@ import { ThemedText } from '@/components/ThemedText';
 import ICoupon from '@/interfaces/ICoupon';
 import CouponCard from '@/components/CouponCard';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { act } from 'react-test-renderer';
 
 export default function CouponContainer({
   date,
@@ -31,8 +32,8 @@ export default function CouponContainer({
   isEditMode?: boolean;
   selectedCoupons?: Set<string>;
   onPressCouponCard: (id: string) => void;
-  activeCoupons: number;
-  redeemedCoupons: number;
+  activeCoupons?: number;
+  redeemedCoupons?: number;
 }) {
   const [isOpened, setIsOpened] = useState(false);
   const [heightAnim] = useState(new Animated.Value(0));
@@ -80,26 +81,36 @@ export default function CouponContainer({
         >
           {date}
         </ThemedText>
-        <ThemedText
-          type="default"
-          style={{
-            marginLeft: 4,
-            color: Colors.light.activeCoupon,
-            fontSize: 12,
-          }}
-        >
-          {`ACTIVOS(${activeCoupons})`}
-        </ThemedText>
-        <ThemedText
-          type="default"
-          style={{
-            marginLeft: 4,
-            color: Colors.light.redeemedBg,
-            fontSize: 12,
-          }}
-        >
-          {`CANJEADOS(${redeemedCoupons})`}
-        </ThemedText>
+        {activeCoupons !== undefined && redeemedCoupons !== undefined && (
+          <View
+            style={{
+              flexDirection: 'row',
+              flex: 1,
+              paddingHorizontal: 20,
+            }}
+          >
+            <ThemedText
+              type="default"
+              style={{
+                marginLeft: 4,
+                color: Colors.light.activeCoupon,
+                fontSize: 12,
+              }}
+            >
+              {`ACTIVOS(${activeCoupons})`}
+            </ThemedText>
+            <ThemedText
+              type="default"
+              style={{
+                marginLeft: 4,
+                color: Colors.light.redeemedBg,
+                fontSize: 12,
+              }}
+            >
+              {`CANJEADOS(${redeemedCoupons})`}
+            </ThemedText>
+          </View>
+        )}
       </TouchableOpacity>
       <Animated.View style={[styles.couponContainer, { maxHeight }]}>
         {/** Coupons */}
