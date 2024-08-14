@@ -24,6 +24,7 @@ export default function CouponContainer({
   onPressCouponCard,
   activeCoupons,
   redeemedCoupons,
+  historyView,
 }: {
   date: string;
   couponsInADay: Array<ICoupon>;
@@ -34,6 +35,7 @@ export default function CouponContainer({
   onPressCouponCard: (id: string) => void;
   activeCoupons?: number;
   redeemedCoupons?: number;
+  historyView?: boolean;
 }) {
   const [isOpened, setIsOpened] = useState(false);
   const [heightAnim] = useState(new Animated.Value(0));
@@ -81,36 +83,38 @@ export default function CouponContainer({
         >
           {date}
         </ThemedText>
-        {activeCoupons !== undefined && redeemedCoupons !== undefined && (
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 1,
-              paddingHorizontal: 20,
-            }}
-          >
-            <ThemedText
-              type="default"
+        {activeCoupons !== undefined &&
+          redeemedCoupons !== undefined &&
+          !historyView && (
+            <View
               style={{
-                marginLeft: 4,
-                color: Colors.light.activeCoupon,
-                fontSize: 12,
+                flexDirection: 'row',
+                flex: 1,
+                paddingHorizontal: 20,
               }}
             >
-              {`ACTIVOS(${activeCoupons})`}
-            </ThemedText>
-            <ThemedText
-              type="default"
-              style={{
-                marginLeft: 4,
-                color: Colors.light.redeemedBg,
-                fontSize: 12,
-              }}
-            >
-              {`CANJEADOS(${redeemedCoupons})`}
-            </ThemedText>
-          </View>
-        )}
+              <ThemedText
+                type="default"
+                style={{
+                  marginLeft: 4,
+                  color: Colors.light.activeCoupon,
+                  fontSize: 12,
+                }}
+              >
+                {`ACTIVOS(${activeCoupons})`}
+              </ThemedText>
+              <ThemedText
+                type="default"
+                style={{
+                  marginLeft: 4,
+                  color: Colors.light.redeemedBg,
+                  fontSize: 12,
+                }}
+              >
+                {`CANJEADOS(${redeemedCoupons})`}
+              </ThemedText>
+            </View>
+          )}
       </TouchableOpacity>
       <Animated.View style={[styles.couponContainer, { maxHeight }]}>
         {/** Coupons */}
@@ -124,6 +128,7 @@ export default function CouponContainer({
               handleSelected={handleSelected}
               onPress={onPressCouponCard}
               isSelected={false}
+              historyView={historyView}
             />
           )}
           keyExtractor={(item) => item._id}
@@ -148,6 +153,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flexWrap: 'nowrap',
     alignContent: 'flex-start',
+    margin: 'auto',
     alignItems: 'center',
     padding: 14,
     justifyContent: 'center',

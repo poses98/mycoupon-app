@@ -1,12 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  Alert,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import {
   CameraView,
   useCameraPermissions,
@@ -164,15 +157,7 @@ export default function Validator() {
           </>
         )}
       </View>
-      <TouchableOpacity
-        onPress={() => {
-          setBusyRead(false);
-          setScannedCoupon(undefined);
-          setIsCouponRedeemed(false);
-        }}
-      >
-        <Text>RESET</Text>
-      </TouchableOpacity>
+
       {scannedCoupon !== undefined && (
         <CouponValidation
           coupon={scannedCoupon}

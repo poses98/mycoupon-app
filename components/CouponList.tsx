@@ -6,7 +6,13 @@ import { CouponStatus } from '@/enums/CouponStatus';
 import CustomModal from './CustomModal';
 import CouponVisualizer from './CouponVisualizer';
 
-export default function CouponList({ coupons }: { coupons: Array<ICoupon> }) {
+export default function CouponList({
+  coupons,
+  historyView,
+}: {
+  coupons: Array<ICoupon>;
+  historyView?: boolean;
+}) {
   const [couponsByDate, setCouponsByDate] = useState<any>([]);
   const [showingCoupon, setShowingCoupon] = useState<ICoupon | undefined>();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -54,7 +60,7 @@ export default function CouponList({ coupons }: { coupons: Array<ICoupon> }) {
   };
 
   return (
-    <View>
+    <View style={{ width: '100%' }}>
       <CustomModal
         title={'Cupón'}
         isVisible={isModalVisible}
@@ -78,6 +84,7 @@ export default function CouponList({ coupons }: { coupons: Array<ICoupon> }) {
             activeCoupons={couponsInADay.not_redeemed}
             redeemedCoupons={couponsInADay.redeemed}
             onPressCouponCard={onPressCouponCard}
+            historyView={historyView}
           />
         ))}
     </View>

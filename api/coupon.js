@@ -98,6 +98,37 @@ class CouponApi {
       return null;
     }
   }
+
+  static async getCouponsValidatedBy() {
+    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+      await AuthApi.refreshAccessToken();
+    const url = `${BASE_PATH}/${API_VERSION}/validated-by-coupons`;
+    const request = new Request(url, {
+      method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+      }),
+    });
+
+    console.log('request', request);
+
+    try {
+      const response = await fetch(request);
+
+      if (response.status !== 200) {
+        throw new Error('Error getting coupons');
+      }
+
+      let responseData = await response.json();
+
+      return responseData;
+    } catch (error) {
+      console.error('error', error);
+
+      return null;
+    }
+  }
 }
 
 export default CouponApi;

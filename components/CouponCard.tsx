@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/ThemedText';
 import ICoupon from '@/interfaces/ICoupon';
 import { CouponStatus } from '@/enums/CouponStatus';
 import { AntDesign } from '@expo/vector-icons';
+import { getFormattedTime } from '../utils/dateUtils';
 
 const CouponCard = React.memo(
   ({
@@ -13,23 +14,33 @@ const CouponCard = React.memo(
     handleSelected,
     onPress,
     isSelected,
+    historyView,
   }: {
     coupon: ICoupon;
     handleSelected?: (id: string) => void;
     onPress: (id: string) => void;
     isSelected?: boolean;
+    historyView?: boolean;
   }) => {
     const memoizedQRCode = useMemo(() => {
       return <QRCode value={coupon._id} size={50} />;
     }, [coupon._id]);
+
+    const redeemedDate = new Date(coupon.redeemed_date);
+
+    const redeemedHourStr = getFormattedTime(redeemedDate);
     return (
       <TouchableOpacity
         key={coupon._id}
         style={[
           styles.couponCard,
           coupon.status === CouponStatus.NOT_REDEEMED
-            ? styles.activeCoupon
-            : styles.redeemedCoupon,
+            ? !historyView
+              ? styles.activeCoupon
+              : {}
+            : !historyView
+            ? styles.redeemedCoupon
+            : {},
           isSelected ? styles.selected : {},
         ]}
         onPress={() => {
@@ -51,14 +62,14 @@ const CouponCard = React.memo(
             },
           ]}
         >
-          {/**QR Code */}
           {memoizedQRCode}
-          {/**UID */}
           <ThemedText type="form-label" style={styles.couponIdText}>
             {coupon._id}
           </ThemedText>
         </View>
-        {/**Title */}
+        {historyView && (
+          <ThemedText type="form-label">{redeemedHourStr}</ThemedText>
+        )}
         <Text
           style={[
             styles.couponTitle,
