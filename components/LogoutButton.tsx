@@ -13,7 +13,7 @@ const LogoutButton = () => {
         router.navigate('/sign-in');
       }}
     >
-      <Text style={styles.logoutText}>Logout</Text>
+      <Text style={styles.logoutText}>Cerrar Sesión</Text>
     </TouchableOpacity>
   );
 };
