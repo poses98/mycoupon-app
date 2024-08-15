@@ -53,7 +53,10 @@ export default function CouponContainer({
 
   const maxHeight = heightAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, couponsInADay.length * 100], // Ajusta el valor para obtener la altura correcta
+    outputRange: [
+      0,
+      couponsInADay.length * 100 > 150 ? couponsInADay.length * 100 : 150,
+    ],
   });
 
   return (
