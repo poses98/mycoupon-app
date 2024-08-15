@@ -70,14 +70,18 @@ const CouponCard = React.memo(
         {historyView && (
           <ThemedText type="form-label">{redeemedHourStr}</ThemedText>
         )}
-        <Text
-          style={[
-            styles.couponTitle,
-            coupon.status === CouponStatus.REDEEMED ? styles.lowOpacity : {},
-          ]}
-        >
-          {coupon.title}
-        </Text>
+        {
+          <Text
+            style={[
+              styles.couponTitle,
+              coupon.status === CouponStatus.REDEEMED ? styles.lowOpacity : {},
+            ]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {coupon.title}
+          </Text>
+        }
       </TouchableOpacity>
     );
   }
@@ -87,7 +91,7 @@ const styles = StyleSheet.create({
   couponCard: {
     width: '22%',
     backgroundColor: 'white',
-    minHeight: 122,
+    minHeight: 110,
     borderRadius: 16,
     marginVertical: 5,
     marginHorizontal: 5,
