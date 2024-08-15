@@ -5,10 +5,13 @@ import ICoupon from '@/interfaces/ICoupon';
 import CouponApi from '@/api/coupon';
 import CouponList from '@/components/CouponList';
 import Loader from '@/components/Loader';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function History() {
   const [isLoading, setIsLoading] = useState(true);
   const [coupons, setCoupons] = useState<Array<ICoupon>>([]);
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const getCoupons = async () => {
@@ -26,7 +29,7 @@ export default function History() {
       }
     };
     getCoupons();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
