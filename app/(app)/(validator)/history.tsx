@@ -6,6 +6,7 @@ import CouponApi from '@/api/coupon';
 import CouponList from '@/components/CouponList';
 import Loader from '@/components/Loader';
 import { useIsFocused } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function History() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,6 +15,7 @@ export default function History() {
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    setIsLoading(true);
     const getCoupons = async () => {
       try {
         const couponsFetch = await CouponApi.getCouponsValidatedBy();
@@ -28,14 +30,14 @@ export default function History() {
         Alert.alert('Error', 'No se pudieron cargar los cupones');
       }
     };
-    getCoupons();
+    if (isFocused) getCoupons();
   }, [isFocused]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       {isLoading && <Loader />}
       {!isLoading && <CouponList coupons={coupons} historyView />}
-    </View>
+    </ScrollView>
   );
 }
 
@@ -45,6 +47,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     padding: 15,
+    paddingBottom: 50,
     width: '100%',
+    height: '100%',
   },
 });
