@@ -14,6 +14,8 @@ import CouponApi from '@/api/coupon';
 import CouponValidation from '@/components/CouponValidation';
 import ICoupon from '@/interfaces/ICoupon';
 import { CouponStatus } from '@/enums/CouponStatus';
+import { AntDesign } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 export default function Validator() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -29,6 +31,7 @@ export default function Validator() {
     undefined
   );
   const [isCouponRedeemed, setIsCouponRedeemed] = useState(true);
+  const router = useRouter();
 
   if (!permission) {
     return (
@@ -109,6 +112,10 @@ export default function Validator() {
     }, 500);
   };
 
+  const handleClose = () => {
+    router.navigate('/');
+  };
+
   if (!permission.granted) {
     return (
       <View style={styles.container}>
@@ -126,6 +133,14 @@ export default function Validator() {
         {/**TODO add close button that navigate to home screen */}
         {scannedCoupon === undefined && (
           <>
+            <View style={styles.close}>
+              <AntDesign
+                name="close"
+                size={30}
+                color="white"
+                onPress={handleClose}
+              />
+            </View>
             <ThemedText type="title" style={styles.title}>
               Escanea el cupón
             </ThemedText>
@@ -176,6 +191,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     backgroundColor: 'transparent',
+  },
+  close: {
+    position: 'absolute',
+    top: 60,
+    right: 40,
   },
   qrCodeSquare: {
     position: 'absolute',
