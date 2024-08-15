@@ -12,7 +12,7 @@ type MenuCardProps = {
 const MenuCard: React.FC<MenuCardProps> = ({ icon, title, onClick }) => {
   return (
     <TouchableOpacity style={styles.menuCard} onPress={onClick}>
-      <View></View>
+      <View />
       <Image source={icon} style={styles.icon} />
       <Text style={styles.title}>{title}</Text>
     </TouchableOpacity>
