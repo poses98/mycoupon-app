@@ -43,12 +43,12 @@ export default function History() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    padding: 15,
-    paddingBottom: 50,
     width: '100%',
-    height: '100%',
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
+    alignContent: 'flex-start',
+    alignItems: 'flex-start',
+    padding: 14,
+    justifyContent: 'center',
   },
 });
