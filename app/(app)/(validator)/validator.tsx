@@ -57,16 +57,14 @@ export default function Validator() {
         throw new Error('Código QR inválido');
       }
 
-      /**Get coupon */
       const storedCoupon = await CouponApi.getCouponById(data);
       if (storedCoupon === null) {
         throw new Error('Coupon not found');
       }
-      /**If status is redeemed then show red screen */
+
       const couponRedeemed = storedCoupon.status === CouponStatus.REDEEMED;
       setIsCouponRedeemed(couponRedeemed);
       if (!couponRedeemed) {
-        /**Else validate and show the validation screen */
         const couponValidation = await CouponApi.validateCoupon({
           couponId: data,
         });
@@ -125,6 +123,7 @@ export default function Validator() {
   return (
     <>
       <View style={styles.container}>
+        {/**TODO add close button that navigate to home screen */}
         {scannedCoupon === undefined && (
           <>
             <ThemedText type="title" style={styles.title}>
