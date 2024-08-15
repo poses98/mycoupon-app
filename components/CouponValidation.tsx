@@ -6,6 +6,7 @@ import { ThemedText } from './ThemedText';
 import { AntDesign } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
+import Button from './Button';
 
 export default function CouponValidation({
   coupon,
@@ -121,6 +122,7 @@ export default function CouponValidation({
           </ThemedText>
         </View>
       )}
+      <Button title="VOLVER A ESCANEAR" onPress={handleClose} />
     </SafeAreaView>
   );
 }
@@ -145,13 +147,14 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     zIndex: 5,
+    marginBottom: 20,
   },
   title: {
     fontFamily: 'ArialRounded',
     color: 'white',
     fontSize: 40,
     lineHeight: 45,
-    marginBottom: 30,
+    marginBottom: 10,
   },
   sectionHeader: {
     color: 'white',
@@ -170,5 +173,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
+    marginBottom: 40,
   },
 });
