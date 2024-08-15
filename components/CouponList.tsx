@@ -26,8 +26,11 @@ export default function CouponList({
           not_redeemed: number;
         };
       } = {};
+
       coupons.forEach((coupon) => {
-        const date = coupon.created_at.toString().split('T')[0];
+        const date = !historyView
+          ? coupon.created_at.toString().split('T')[0]
+          : coupon.redeemed_date.toString().split('T')[0];
         if (!couponDate[date]) {
           couponDate[date] = {
             coupons: [],
