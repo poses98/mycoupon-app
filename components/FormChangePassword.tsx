@@ -29,7 +29,6 @@ const FormChangePassword = ({ onClose }: { onClose: () => void }) => {
   };
 
   const handleSubmit = async () => {
-    console.log(formData);
     if (formData.newPassword !== formData.confirmNewPassword) {
       Alert.alert('Error', 'Las contraseñas no coinciden');
       return;
