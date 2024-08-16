@@ -45,7 +45,7 @@ export default function Validator() {
     data,
     cornerPoints,
   }: BarcodeScanningResult) => {
-    if (busyRead) {
+    if (busyRead && scannedCoupon === undefined) {
       return;
     }
     handleSquare(cornerPoints);
