@@ -30,6 +30,13 @@ export default function Home() {
           }}
         />
         <MenuCard
+          icon={require('@/assets/icons/settings.png')}
+          title="AJUSTES"
+          onClick={() => {
+            router.navigate('/settings');
+          }}
+        />
+        <MenuCard
           icon={require('@/assets/icons/question.png')}
           title="AYUDA"
           onClick={() => {

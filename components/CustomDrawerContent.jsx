@@ -21,12 +21,7 @@ const CustomDrawerContent = (props) => {
           <ThemedText type="title" style={styles.drawerText}>
             {process.env.EXPO_PUBLIC_APP_NAME}
           </ThemedText>
-          <ThemedText
-            type="form-label"
-            style={{ color: 'rgba(255,255,255,0.4)' }}
-          >
-            {process.env.EXPO_PUBLIC_APP_VERSION} by Pablo Osés
-          </ThemedText>
+          
         </View>
         <DrawerItemList {...props} />
         <LogoutButton />
