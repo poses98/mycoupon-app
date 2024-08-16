@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { Modal, View, Text, Pressable, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Colors } from '@/constants/Colors';
@@ -18,19 +19,32 @@ export default function CustomModal({
   height?: boolean;
   isForm?: boolean;
 }) {
+  const [visible, setVisible] = useState(isVisible);
+
+  useEffect(() => {
+    if (isVisible) {
+      setVisible(true);
+    }
+  }, [isVisible]);
+
+  const handleClose = () => {
+    setVisible(false);
+  };
+
   return (
     <Modal
       animationType="slide"
       transparent={true}
       collapsable
-      visible={isVisible}
-      onRequestClose={onClose}
+      visible={visible}
+      onRequestClose={handleClose}
+      onDismiss={onClose}
     >
       <Pressable
         style={styles.modalBackground}
         onPress={() => {
           if (!isForm) {
-            onClose();
+            handleClose();
           }
         }}
       >
@@ -39,7 +53,7 @@ export default function CustomModal({
             <ThemedText type="subtitle" style={styles.title}>
               {title}
             </ThemedText>
-            <Pressable onPress={onClose}>
+            <Pressable onPress={handleClose}>
               <MaterialIcons name="close" color="#000" size={22} />
             </Pressable>
           </View>
