@@ -2,18 +2,29 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import useAuth from '@/hooks/useAuth';
 import { router } from 'expo-router';
+import { Colors } from '@/constants/Colors';
 
-const LogoutButton = () => {
+const LogoutButton = ({ color }: { color?: boolean }) => {
   const { signOut } = useAuth();
   return (
     <TouchableOpacity
-      style={styles.logoutContainer}
+      style={[
+        styles.logoutContainer,
+        { borderColor: color ? Colors.light.tint : 'white' },
+      ]}
       onPress={async () => {
         await signOut();
         router.navigate('/sign-in');
       }}
     >
-      <Text style={styles.logoutText}>Cerrar Sesión</Text>
+      <Text
+        style={[
+          styles.logoutText,
+          { color: color ? Colors.light.tint : 'white' },
+        ]}
+      >
+        Cerrar Sesión
+      </Text>
     </TouchableOpacity>
   );
 };

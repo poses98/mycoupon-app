@@ -1,6 +1,8 @@
-import { View } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import InputWithLabel from './InputWithLabel';
 import { useState } from 'react';
+import Button from './Button';
+import AuthApi from '@/api/AuthApi';
 
 interface IFormDataPassword {
   oldPassword: string;
@@ -8,7 +10,7 @@ interface IFormDataPassword {
   confirmNewPassword: string;
 }
 
-const FormChangePassword = () => {
+const FormChangePassword = ({ onClose }: { onClose: () => void }) => {
   const [formData, setFormData] = useState<IFormDataPassword>({
     oldPassword: '',
     newPassword: '',
@@ -26,18 +28,29 @@ const FormChangePassword = () => {
     setFormData({ ...formData, confirmNewPassword });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log(formData);
     if (formData.newPassword !== formData.confirmNewPassword) {
-      console.log('Las contraseñas no coinciden');
+      Alert.alert('Error', 'Las contraseñas no coinciden');
       return;
     } else {
-      /**API Call to change password */
+      try {
+        const response = await AuthApi.changePassword(formData);
+        if (!response?.success) {
+          throw new Error(response.message);
+        } else {
+          Alert.alert('Éxito', 'Contraseña cambiada correctamente', [
+            { text: 'OK', onPress: onClose },
+          ]);
+        }
+      } catch (e: unknown) {
+        Alert.alert('Error', 'No se ha podido cambiar la contraseña');
+      }
     }
   };
 
   return (
-    <View>
+    <View style={styles.formContainer}>
       <InputWithLabel
         label="Contraseña anterior"
         secureTextEntry
@@ -53,6 +66,16 @@ const FormChangePassword = () => {
         secureTextEntry
         onChange={setConfirmNewPassword}
       />
+      <Button title="Cambiar contraseña" onPress={handleSubmit} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  formContainer: {
+    width: '100%',
+    padding: 20,
+  },
+});
+
+export default FormChangePassword;
