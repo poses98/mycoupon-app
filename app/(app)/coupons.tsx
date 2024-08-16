@@ -121,6 +121,7 @@ export default function Coupons() {
             onClose={() => {
               handleModalVisibility(false);
             }}
+            isForm
           >
             <CreateCouponForm
               onSubmit={handleFormSubmit}

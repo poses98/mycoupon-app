@@ -9,12 +9,14 @@ export default function CustomModal({
   onClose,
   title,
   height,
+  isForm,
 }: {
   isVisible: boolean;
   children: React.ReactNode;
   onClose: () => void;
   title: string;
   height?: boolean;
+  isForm?: boolean;
 }) {
   return (
     <Modal
@@ -24,7 +26,14 @@ export default function CustomModal({
       visible={isVisible}
       onRequestClose={onClose}
     >
-      <Pressable style={styles.modalBackground} onPress={onClose}>
+      <Pressable
+        style={styles.modalBackground}
+        onPress={() => {
+          if (!isForm) {
+            onClose();
+          }
+        }}
+      >
         <View style={[styles.modalContent, height ? { height: 'auto' } : {}]}>
           <View style={styles.titleContainer}>
             <ThemedText type="subtitle" style={styles.title}>
