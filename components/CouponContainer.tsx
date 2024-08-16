@@ -126,7 +126,6 @@ export default function CouponContainer({
           numColumns={4}
           renderItem={({ item }) => (
             <CouponCard
-              key={item._id}
               coupon={item}
               handleSelected={handleSelected}
               onPress={onPressCouponCard}
@@ -135,8 +134,13 @@ export default function CouponContainer({
             />
           )}
           keyExtractor={(item) => item._id}
-          initialNumToRender={10}
+          initialNumToRender={28}
           scrollEnabled={false}
+          getItemLayout={(data, index) => ({
+            length: 110, // or the height of your item
+            offset: 100 * index,
+            index,
+          })}
         />
       </Animated.View>
     </View>

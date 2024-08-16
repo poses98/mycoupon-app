@@ -7,6 +7,7 @@ import ICoupon from '@/interfaces/ICoupon';
 import { CouponStatus } from '@/enums/CouponStatus';
 import { AntDesign } from '@expo/vector-icons';
 import { getFormattedTime } from '../utils/dateUtils';
+import { Image } from 'expo-image';
 
 const CouponCard = React.memo(
   ({
@@ -22,10 +23,6 @@ const CouponCard = React.memo(
     isSelected?: boolean;
     historyView?: boolean;
   }) => {
-    const memoizedQRCode = useMemo(() => {
-      return <QRCode value={coupon._id} size={50} />;
-    }, [coupon._id]);
-
     const redeemedDate = new Date(coupon.redeemed_date);
 
     const redeemedHourStr = getFormattedTime(redeemedDate);
@@ -62,7 +59,11 @@ const CouponCard = React.memo(
             },
           ]}
         >
-          {memoizedQRCode}
+          <Image
+            source={require('@/assets/icons/qr-code100x100.png')}
+            style={styles.icon}
+            contentFit="contain"
+          />
           <ThemedText type="form-label" style={styles.couponIdText}>
             {coupon._id}
           </ThemedText>
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     paddingTop: 13,
     paddingBottom: 8,
   },
-
+  icon: { width: 50, height: 50 },
   couponIdText: {
     fontSize: 5,
     color: Colors.light.tint,

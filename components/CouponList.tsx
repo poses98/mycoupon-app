@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import { View, Text } from 'react-native';
 import ICoupon from '@/interfaces/ICoupon';
 import CouponContainer from './CouponContainer';
@@ -13,54 +13,73 @@ export default function CouponList({
   coupons: Array<ICoupon>;
   historyView?: boolean;
 }) {
-  const [couponsByDate, setCouponsByDate] = useState<any>([]);
+  const [couponsByDate, setCouponsByDate] = useState<Record<string, any>>({});
   const [showingCoupon, setShowingCoupon] = useState<ICoupon | undefined>();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  useEffect(() => {
-    if (coupons.length > 0) {
-      const couponDate: {
-        [date: string]: {
-          coupons: Array<ICoupon>;
-          redeemed: number;
-          not_redeemed: number;
-        };
-      } = {};
-
-      coupons.forEach((coupon) => {
-        const date = !historyView
-          ? coupon.created_at.toString().split('T')[0]
-          : coupon.redeemed_date.toString().split('T')[0];
-        if (!couponDate[date]) {
-          couponDate[date] = {
-            coupons: [],
-            redeemed: 0,
-            not_redeemed: 0,
-          };
-        }
-        if (coupon.status === CouponStatus.REDEEMED) {
-          couponDate[date].redeemed++;
-        } else {
-          couponDate[date].not_redeemed++;
-        }
-        couponDate[date].coupons.push(coupon);
-      });
-      setCouponsByDate(couponDate);
-    }
+  const couponsById = useMemo(() => {
+    return coupons.reduce((map, coupon) => {
+      map[coupon._id] = coupon;
+      return map;
+    }, {} as Record<string, ICoupon>);
   }, [coupons]);
 
-  const onPressCouponCard = (id: string) => {
-    setShowingCoupon(coupons.filter((coupon) => coupon._id == id)[0]);
-    setIsModalVisible(true);
-  };
+  const memoizedCouponsByDate = useMemo(() => {
+    const couponDate: {
+      [date: string]: {
+        coupons: Array<ICoupon>;
+        redeemed: number;
+        not_redeemed: number;
+      };
+    } = {};
 
-  const handleModalVisibility = (visible: boolean | null) => {
+    coupons.forEach((coupon) => {
+      const date = !historyView
+        ? coupon.created_at.toString().split('T')[0]
+        : coupon.redeemed_date.toString().split('T')[0];
+
+      if (!couponDate[date]) {
+        couponDate[date] = {
+          coupons: [],
+          redeemed: 0,
+          not_redeemed: 0,
+        };
+      }
+
+      if (coupon.status === CouponStatus.REDEEMED) {
+        couponDate[date].redeemed++;
+      } else {
+        couponDate[date].not_redeemed++;
+      }
+      couponDate[date].coupons.push(coupon);
+    });
+
+    return couponDate;
+  }, [coupons, historyView]);
+
+  useEffect(() => {
+    setCouponsByDate(memoizedCouponsByDate);
+  }, [memoizedCouponsByDate]);
+
+  const onPressCouponCard = useCallback(
+    (id: string) => {
+      setShowingCoupon(couponsById[id]); // Instant lookup
+      setIsModalVisible(true);
+    },
+    [couponsById]
+  );
+
+  const handleModalVisibility = useCallback((visible: boolean | null) => {
     if (typeof visible === 'boolean') {
       setIsModalVisible(visible);
       return;
     }
     setIsModalVisible((prevState) => !prevState);
-  };
+  }, []);
+
+  const memoizedCouponEntries = useMemo(() => {
+    return coupons.length > 0 ? Object.entries(couponsByDate) : [];
+  }, [coupons.length, couponsByDate]);
 
   return (
     <View style={{ width: '100%' }}>
@@ -72,14 +91,12 @@ export default function CouponList({
         }}
         height
       >
-        {showingCoupon !== undefined && (
-          <CouponVisualizer coupon={showingCoupon} />
-        )}
+        <CouponVisualizer coupon={showingCoupon} />
       </CustomModal>
-      {/**TODO center this text on screen */}
-      {coupons.length === 0 && <Text>No hay cupones</Text>}
-      {coupons.length > 0 &&
-        Object.entries(couponsByDate).map(([date, couponsInADay]: any) => (
+      {coupons.length === 0 ? (
+        <Text style={{}}>No hay cupones</Text>
+      ) : (
+        memoizedCouponEntries.map(([date, couponsInADay]: any) => (
           <CouponContainer
             key={date}
             date={date}
@@ -89,7 +106,8 @@ export default function CouponList({
             onPressCouponCard={onPressCouponCard}
             historyView={historyView}
           />
-        ))}
+        ))
+      )}
     </View>
   );
 }

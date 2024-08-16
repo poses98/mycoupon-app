@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native';
 import Button from '@/components/Button';
 import { Colors } from '@/constants/Colors';
@@ -19,6 +19,15 @@ export default function Coupons() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+  const [modalContent, setModalContent] = useState<ICoupon | undefined>(
+    undefined
+  );
+
+  const handleCouponPress = useCallback((couponId: string) => {
+    const selectedCoupon = coupons.find((coupon) => coupon._id === couponId);
+    setModalContent(selectedCoupon);
+    setIsModalVisible(true);
+  }, []);
 
   useEffect(() => {
     const getCoupons = async () => {
@@ -128,6 +137,13 @@ export default function Coupons() {
               isSubmittingForm={isSubmittingForm}
             />
           </CustomModal>
+          {/*   <CustomModal
+            title={'View Coupon'}
+            isVisible={isModalVisible}
+            onClose={() => setIsModalVisible(false)}
+          >
+            <CouponVisualizer coupon={modalContent} />
+          </CustomModal> */}
           <CouponList coupons={coupons} />
         </ScrollView>
       )}

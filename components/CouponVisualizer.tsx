@@ -10,7 +10,10 @@ import Button from './Button';
 import { getFormattedDate, getFormattedTime } from '@/utils/dateUtils';
 import { ShareableCard } from './ShareableCard';
 
-export default function CouponVisualizer({ coupon }: { coupon: ICoupon }) {
+export default function CouponVisualizer({ coupon }: { coupon?: ICoupon }) {
+  if (!coupon) {
+    return <></>;
+  }
   const [sharing, setSharing] = useState(false);
   const redeemed = coupon.status === CouponStatus.REDEEMED;
   const statusText = redeemed ? 'CANJEADO' : 'NO CANJEADO';
