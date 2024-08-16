@@ -46,7 +46,6 @@ export default function Validator() {
     cornerPoints,
   }: BarcodeScanningResult) => {
     if (busyRead) {
-      console.log(busyRead);
       return;
     }
     handleSquare(cornerPoints);
