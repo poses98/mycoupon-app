@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import QRCode from 'react-qr-code';
@@ -8,8 +8,10 @@ import { CouponStatus } from '@/enums/CouponStatus';
 import { AntDesign } from '@expo/vector-icons';
 import Button from './Button';
 import { getFormattedDate, getFormattedTime } from '@/utils/dateUtils';
+import { ShareableCard } from './ShareableCard';
 
 export default function CouponVisualizer({ coupon }: { coupon: ICoupon }) {
+  const [sharing, setSharing] = useState(false);
   const redeemed = coupon.status === CouponStatus.REDEEMED;
   const statusText = redeemed ? 'CANJEADO' : 'NO CANJEADO';
   const redeemedDate = redeemed ? new Date(coupon.redeemed_date) : null;
@@ -83,8 +85,9 @@ export default function CouponVisualizer({ coupon }: { coupon: ICoupon }) {
         )}
       </View>
       {coupon.status === CouponStatus.NOT_REDEEMED && (
-        <Button title="COMPARTIR" onPress={() => console.log('COMPARTIR')} />
+        <Button title="COMPARTIR" onPress={() => setSharing(true)} />
       )}
+      {sharing && <ShareableCard coupon={coupon} />}
     </View>
   );
 }
