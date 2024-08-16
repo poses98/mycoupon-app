@@ -14,6 +14,15 @@ import { ThemedText } from './ThemedText';
 import QuantitySetter from './QuantitySetter';
 import { Colors } from '@/constants/Colors';
 
+const suggestedProducts = [
+  'McMenú® Grande',
+  'Cubo 25 McNuggets®',
+  'McFlurry®',
+  'McMuffin® Salchicha y Huevo',
+  'McMuffin® Bacon y Huevo',
+  'Happy Meal®',
+];
+
 interface CouponFormProps {
   onSubmit: (formData: {
     name: string;
@@ -54,15 +63,6 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({
       setSubmitSent(false);
     }, 1000);
   };
-
-  const suggestedProducts = [
-    'McMenú® Grande',
-    'Cubo 25 McNuggets®',
-    'McFlurry®',
-    'McMuffin® Salchicha y Huevo',
-    'Happy Meal®',
-    'BigMac®',
-  ];
 
   const handleQuantityChange = (quantity: number) => {
     setQuantity(quantity);
