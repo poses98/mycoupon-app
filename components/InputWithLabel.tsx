@@ -16,18 +16,20 @@ export default function InputWithLabel({
   defaultValue,
   placeholder,
   inputComponent,
+  labelFlexDirection,
   ...rest
 }: {
   label?: string;
   icon?: any;
   secureTextEntry?: boolean;
   onChange?: any;
-  value?: string | Date;
+  value?: string;
   autocapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   labelComponent?: React.ReactElement;
   defaultValue?: string;
   placeholder?: string;
   inputComponent?: React.ReactElement;
+  labelFlexDirection?: 'row' | 'column';
 }) {
   return (
     <View style={styles.container}>
@@ -35,7 +37,12 @@ export default function InputWithLabel({
         <ThemedText type="form-label">{label}</ThemedText>
       )}
       {label && labelComponent && (
-        <View style={styles.labelContainer}>
+        <View
+          style={[
+            styles.labelContainer,
+            { flexDirection: labelFlexDirection || 'row' },
+          ]}
+        >
           <ThemedText type="form-label">{label}</ThemedText>
           {labelComponent}
         </View>
@@ -58,6 +65,7 @@ export default function InputWithLabel({
             onChangeText={onChange}
             defaultValue={defaultValue ? defaultValue : ''}
             placeholder={placeholder}
+            value={value}
             {...rest}
           />
         )}
@@ -92,7 +100,6 @@ const styles = StyleSheet.create({
   },
   labelContainer: {
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 5,
     alignContent: 'center',
