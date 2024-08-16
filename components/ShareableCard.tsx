@@ -30,20 +30,23 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
       <ThemedText type="title" style={styles.title}>
         Disfruta de la experiencia McDonald's
       </ThemedText>
-
-      <ThemedText type="default" style={styles.subtitle}>
-        Queremos regalarte un/a
-        <Text style={{ fontWeight: 'bold', fontSize: 24 }}>
-          {'\n'}
+      <View style={styles.yellowLine} />
+      <View style={styles.subtitleContainer}>
+        <ThemedText type="default" style={styles.subtitle}>
+          Queremos regalarte un/a
+        </ThemedText>
+        <ThemedText type="default" style={[styles.subtitle, styles.product]}>
           {coupon.title}
-          {'\n'}
-        </Text>
-        para disfrutarlo con quien tu elijas.
-      </ThemedText>
+        </ThemedText>
+        <ThemedText type="default" style={styles.subtitle}>
+          para disfrutarlo con quien tu elijas.
+        </ThemedText>
+      </View>
+
+      <View style={styles.qrcontainer}>{memoizedQRCode}</View>
       <ThemedText type="defaultSemiBold" style={styles.description}>
         {coupon.description}
       </ThemedText>
-      <View style={styles.qrcontainer}>{memoizedQRCode}</View>
       <Text style={styles.terms}>
         Cupón canjebale en tus restaurantes McDonald's de Navarra y Andoain
         desde el {getFormattedDate(valid_from)} hasta el{' '}
@@ -58,10 +61,16 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    padding: 20,
+    padding: 25,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.light.tint,
+  },
+  yellowLine: {
+    width: '100%',
+    height: 2,
+    backgroundColor: Colors.light.buttonYellow,
+    marginVertical: 10,
   },
   imageContainer: {
     width: 100,
@@ -71,26 +80,32 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
     color: 'white',
+    fontSize: 30,
   },
   qrcontainer: {
-    marginVertical: 20,
+    marginVertical: 15,
   },
   subtitle: {
     textAlign: 'center',
     fontSize: 19,
-    marginVertical: 10,
     fontWeight: 'normal',
     color: 'white',
+  },
+  subtitleContainer: {
+    marginBottom: 10,
   },
   description: {
     textAlign: 'center',
     marginBottom: 10,
+    fontWeight: 'normal',
     color: 'white',
+    width: '90%',
   },
   terms: {
     fontSize: 12,
     color: 'white',
     textAlign: 'justify',
-    marginVertical: 20,
+    marginTop: 20,
   },
+  product: { fontWeight: 'bold', fontSize: 26, marginVertical: 10 },
 });
