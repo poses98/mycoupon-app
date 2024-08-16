@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  KeyboardAvoidingView,
+} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '@/components/Button';
 import InputWithLabel from './InputWithLabel';
@@ -50,10 +56,12 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({
   };
 
   const suggestedProducts = [
-    'McMenú Grande',
-    'Cubo 25 McNuggets',
-    'McFlurry',
-    'Happy Meal',
+    'McMenú® Grande',
+    'Cubo 25 McNuggets®',
+    'McFlurry®',
+    'McMuffin® Salchicha y Huevo',
+    'Happy Meal®',
+    'BigMac®',
   ];
 
   const handleQuantityChange = (quantity: number) => {
@@ -69,6 +77,17 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({
     setValidFrom(new Date());
   };
 
+  const renderSuggestedProduct = ({ item }: { item: string }) => {
+    return (
+      <TouchableOpacity
+        style={styles.suggestedProducts}
+        onPress={() => setName(item)}
+      >
+        <ThemedText type="link">{item}</ThemedText>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <InputWithLabel
@@ -77,22 +96,14 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({
         onChange={setName}
         placeholder="McMenú Grande y McFlurry"
         labelComponent={
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              width: 'auto',
-            }}
-          >
-            {suggestedProducts.map((product) => (
-              <TouchableOpacity
-                style={styles.suggestedProducts}
-                onPress={() => setName(product)}
-              >
-                <ThemedText type="link">{product}</ThemedText>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <FlatList
+            horizontal
+            data={suggestedProducts}
+            renderItem={renderSuggestedProduct}
+            keyExtractor={(item) => item}
+            showsHorizontalScrollIndicator={false}
+            style={{ marginVertical: 10 }}
+          />
         }
         labelFlexDirection="column"
       />
@@ -190,7 +201,6 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({
         }
         defaultValue={new Date().getFullYear() + '-12-31'}
       />
-
       <QuantitySetter
         initialValue={1}
         onQuantityChange={handleQuantityChange}

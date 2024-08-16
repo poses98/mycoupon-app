@@ -65,12 +65,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: 'white',
     paddingBottom: 20,
-    // Box shadow for iOS
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
-    // Box shadow for Android
     elevation: 5,
   },
   titleContainer: {
