@@ -132,6 +132,17 @@ export default function RootLayout() {
                   },
                 }}
               />
+              <Drawer.Screen
+                name="settings"
+                options={{
+                  title: 'Ajustes',
+                  drawerLabel: 'Ajustes',
+                  headerTintColor: Colors.light.tint,
+                  headerTitleStyle: {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
             </Drawer>
           </GestureHandlerRootView>
         </ThemeProvider>
