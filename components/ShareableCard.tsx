@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import ICoupon from '@/interfaces/ICoupon';
 import { getFormattedDate } from '@/utils/dateUtils';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import QRCode from 'react-qr-code';
 import { Image } from 'expo-image';
 import { ThemedText } from './ThemedText';
@@ -30,19 +30,17 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
         format: 'png',
         quality: 1,
       });
-
       const isAvailable = await Sharing.isAvailableAsync();
       if (isAvailable) {
-        const shareResult = await Sharing.shareAsync(uri, {
+        await Sharing.shareAsync(uri, {
           mimeType: 'image/png',
         });
       } else {
-        console.log('Sharing not available');
+        Alert.alert('Error', 'La opción de compartir no está disponible');
       }
-
-      // You can now use the `uri` to save, share, or display the image.
     } catch (error) {
       console.error('Failed to capture screenshot:', error);
+      Alert.alert('Error', 'Error al compartir. Inténtalo de nuevo');
     }
   };
 
@@ -151,5 +149,10 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     marginTop: 20,
   },
-  product: { fontWeight: 'bold', fontSize: 26, marginVertical: 10 },
+  product: {
+    fontWeight: 'bold',
+    fontSize: 26,
+    marginVertical: 10,
+    lineHeight: 30,
+  },
 });
