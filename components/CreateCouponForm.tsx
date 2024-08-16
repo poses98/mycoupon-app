@@ -49,7 +49,12 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({
     }, 1000);
   };
 
-  const suggestedProducts = ['McMenú Grande', 'Cubo 25 McNuggets'];
+  const suggestedProducts = [
+    'McMenú Grande',
+    'Cubo 25 McNuggets',
+    'McFlurry',
+    'Happy Meal',
+  ];
 
   const handleQuantityChange = (quantity: number) => {
     setQuantity(quantity);
