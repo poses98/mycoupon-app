@@ -62,43 +62,53 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
   }, [cardRef]);
 
   return (
-    <View ref={cardRef} style={styles.container}>
-      <Image
-        source={require('@/assets/images/mcd_logo.svg')}
-        style={styles.imageContainer}
-        contentFit="contain"
-      />
-      <ThemedText type="title" style={styles.title}>
-        Disfruta de la experiencia McDonald's®
-      </ThemedText>
-      <View style={styles.yellowLine} />
-      <View style={styles.subtitleContainer}>
-        <ThemedText type="default" style={styles.subtitle}>
-          Queremos regalarte un/a
+    <>
+      <View style={styles.foreground} />
+      <View ref={cardRef} style={styles.container}>
+        <Image
+          source={require('@/assets/images/mcd_logo.svg')}
+          style={styles.imageContainer}
+          contentFit="contain"
+        />
+        <ThemedText type="title" style={styles.title}>
+          Disfruta de la experiencia McDonald's®
         </ThemedText>
-        <ThemedText type="default" style={[styles.subtitle, styles.product]}>
-          {coupon.title}
+        <View style={styles.yellowLine} />
+        <View style={styles.subtitleContainer}>
+          <ThemedText type="default" style={styles.subtitle}>
+            Queremos regalarte un/a
+          </ThemedText>
+          <ThemedText type="default" style={[styles.subtitle, styles.product]}>
+            {coupon.title}
+          </ThemedText>
+          <ThemedText type="default" style={styles.subtitle}>
+            para disfrutarlo con quien tu elijas.
+          </ThemedText>
+        </View>
+        <View style={styles.qrcontainer}>{memoizedQRCode}</View>
+        <ThemedText type="defaultSemiBold" style={styles.description}>
+          {coupon.description}
         </ThemedText>
-        <ThemedText type="default" style={styles.subtitle}>
-          para disfrutarlo con quien tu elijas.
-        </ThemedText>
+        <Text style={styles.terms}>
+          Cupón canjeable en tus restaurantes McDonald's® de Navarra y Andoain
+          desde el {getFormattedDate(valid_from)} hasta el{' '}
+          {getFormattedDate(valid_until)}. No acumulable a otras ofertas y/o
+          promoción. No válido para pedidos de McDelivery™ ni quioscos de venta.
+          Consultar con el encargado.
+        </Text>
       </View>
-      <View style={styles.qrcontainer}>{memoizedQRCode}</View>
-      <ThemedText type="defaultSemiBold" style={styles.description}>
-        {coupon.description}
-      </ThemedText>
-      <Text style={styles.terms}>
-        Cupón canjeable en tus restaurantes McDonald's® de Navarra y Andoain
-        desde el {getFormattedDate(valid_from)} hasta el{' '}
-        {getFormattedDate(valid_until)}. No acumulable a otras ofertas y/o
-        promoción. No válido para pedidos de McDelivery™ ni quioscos de venta.
-        Consultar con el encargado.
-      </Text>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  foreground: {
+    position: 'absolute',
+    width: '100%',
+    height: 700,
+    backgroundColor: 'rgba(255,255,255, 1)',
+    zIndex: -1,
+  },
   container: {
     width: '100%',
     padding: 25,
