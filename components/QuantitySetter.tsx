@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { ThemedText } from './ThemedText';
@@ -14,6 +20,8 @@ const QuantitySetter: React.FC<QuantitySetterProps> = ({
   onQuantityChange,
 }) => {
   const [quantity, setQuantity] = useState(initialValue);
+  const [editingQuantity, setEditingQuantity] = useState(false);
+  const [inputQuantity, setInputQuantity] = useState(quantity.toString());
 
   const handleIncrement = () => {
     const newQuantity = quantity + 1;
@@ -27,6 +35,24 @@ const QuantitySetter: React.FC<QuantitySetterProps> = ({
       setQuantity(newQuantity);
       onQuantityChange(newQuantity);
     }
+  };
+
+  const handleInputQuantityChange = (text: string) => {
+    setInputQuantity(text);
+  };
+
+  const handleInputQuantityBlur = () => {
+    const newQuantity = parseInt(inputQuantity);
+    if (!isNaN(newQuantity) && newQuantity >= 1) {
+      setQuantity(newQuantity);
+      onQuantityChange(newQuantity);
+      setInputQuantity(newQuantity.toString());
+    }
+    setEditingQuantity(false);
+  };
+
+  const handleInputQuantityFocus = () => {
+    setEditingQuantity(true);
   };
 
   return (
@@ -53,7 +79,20 @@ const QuantitySetter: React.FC<QuantitySetterProps> = ({
         <TouchableOpacity style={styles.button} onPress={handleDecrement}>
           <AntDesign name="minus" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={styles.quantityText}>{quantity}</Text>
+        {editingQuantity ? (
+          <TextInput
+            style={styles.quantityText}
+            value={inputQuantity}
+            onChangeText={handleInputQuantityChange}
+            onBlur={handleInputQuantityBlur}
+            autoFocus
+            keyboardType="numeric"
+          />
+        ) : (
+          <Text style={styles.quantityText} onPress={handleInputQuantityFocus}>
+            {quantity}
+          </Text>
+        )}
         <TouchableOpacity style={styles.button} onPress={handleIncrement}>
           <AntDesign name="plus" size={24} color="black" />
         </TouchableOpacity>
