@@ -27,6 +27,7 @@ const QuantitySetter: React.FC<QuantitySetterProps> = ({
     const newQuantity = quantity + 1;
     setQuantity(newQuantity);
     onQuantityChange(newQuantity);
+    setInputQuantity(newQuantity.toString());
   };
 
   const handleDecrement = () => {
@@ -34,6 +35,7 @@ const QuantitySetter: React.FC<QuantitySetterProps> = ({
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
       onQuantityChange(newQuantity);
+      setInputQuantity(newQuantity.toString());
     }
   };
 
