@@ -13,7 +13,7 @@ const Loader = () => {
         alignItems: 'center',
       }}
     >
-      <ActivityIndicator size="large" color={Colors.light.tint} />
+      <ActivityIndicator size="small" color={Colors.light.tint} />
     </View>
   );
 };
