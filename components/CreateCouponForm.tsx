@@ -6,6 +6,7 @@ import InputWithLabel from './InputWithLabel';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ThemedText } from './ThemedText';
 import QuantitySetter from './QuantitySetter';
+import { Colors } from '@/constants/Colors';
 
 interface CouponFormProps {
   onSubmit: (formData: {
@@ -48,6 +49,8 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({
     }, 1000);
   };
 
+  const suggestedProducts = ['McMenú Grande', 'Cubo 25 McNuggets'];
+
   const handleQuantityChange = (quantity: number) => {
     setQuantity(quantity);
   };
@@ -68,12 +71,46 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({
         value={name}
         onChange={setName}
         placeholder="McMenú Grande y McFlurry"
+        labelComponent={
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              width: 'auto',
+            }}
+          >
+            {suggestedProducts.map((product) => (
+              <TouchableOpacity
+                style={styles.suggestedProducts}
+                onPress={() => setName(product)}
+              >
+                <ThemedText type="link">{product}</ThemedText>
+              </TouchableOpacity>
+            ))}
+          </View>
+        }
+        labelFlexDirection="column"
       />
       <InputWithLabel
         label="DESCRIPCIÓN"
         value={description}
         onChange={setDescription}
-        placeholder="Incluye: 1 McMenú Grande y 1 McFlurry"
+        placeholder={`Incluye: 1 ${name}`}
+        labelComponent={
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: 'auto',
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => setDescription(`Incluye: 1 ${name}`)}
+            >
+              <ThemedText type="link">Aceptar sugerencia</ThemedText>
+            </TouchableOpacity>
+          </View>
+        }
       />
       <InputWithLabel
         label="EVENTO (OPCIONAL)"
@@ -96,7 +133,6 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({
             </TouchableOpacity>
           </View>
         }
-        value={validFrom}
         onChange={setValidFrom}
         inputComponent={
           <DateTimePicker
@@ -131,7 +167,6 @@ const CreateCouponForm: React.FC<CouponFormProps> = ({
             </TouchableOpacity>
           </View>
         }
-        value={validUntil}
         onChange={setValidUntil}
         inputComponent={
           <DateTimePicker
@@ -170,6 +205,13 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: 'white',
+  },
+  suggestedProducts: {
+    borderColor: Colors.light.tint,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5,
+    marginRight: 10,
   },
 });
 
