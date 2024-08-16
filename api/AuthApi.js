@@ -62,6 +62,42 @@ class AuthApi {
       return error;
     }
   }
+
+  static async logout() {
+    await SecureStore.deleteItemAsync('accessToken');
+    await SecureStore.deleteItemAsync('refreshToken');
+  }
+
+  static async changePassword(payload) {
+    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+      await AuthApi.refreshAccessToken();
+    const url = `${BASE_PATH}/${API_VERSION}/user/change-password`;
+
+    const request = new Request(url, {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+      }),
+      body: JSON.stringify(payload),
+    });
+
+    try {
+      const response = await fetch(request);
+      if (response.status === 403) {
+        throw error;
+      } else if (response.status === 400) {
+        throw error;
+      } else if (response.status !== 200) {
+        throw error;
+      }
+      const responseData = await response.json();
+      responseData.success = true;
+      return responseData;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default AuthApi;
