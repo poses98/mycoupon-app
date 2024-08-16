@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import ICoupon from '@/interfaces/ICoupon';
 import { getFormattedDate } from '@/utils/dateUtils';
 import { View, Text, StyleSheet } from 'react-native';
@@ -6,8 +6,11 @@ import QRCode from 'react-qr-code';
 import { Image } from 'expo-image';
 import { ThemedText } from './ThemedText';
 import { Colors } from '@/constants/Colors';
+import { captureRef } from 'react-native-view-shot';
+import * as Sharing from 'expo-sharing';
 
 export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
+  const cardRef = useRef<View>(null);
   const memoizedQRCode = useMemo(() => {
     return (
       <QRCode
@@ -20,15 +23,55 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
   }, [coupon._id]);
   const valid_from = new Date(coupon.valid_from);
   const valid_until = new Date(coupon.valid_until);
+
+  const handleCapture = async () => {
+    try {
+      const uri = await captureRef(cardRef, {
+        format: 'png',
+        quality: 1,
+      });
+
+      const isAvailable = await Sharing.isAvailableAsync();
+      if (isAvailable) {
+        const shareResult = await Sharing.shareAsync(uri, {
+          mimeType: 'image/png',
+        });
+      } else {
+        console.log('Sharing not available');
+      }
+
+      // You can now use the `uri` to save, share, or display the image.
+    } catch (error) {
+      console.error('Failed to capture screenshot:', error);
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (cardRef.current) {
+        cardRef.current.measure((x, y, width, height, pageX, pageY) => {
+          if (width > 0 && height > 0) {
+            clearInterval(interval);
+            handleCapture();
+          }
+        });
+      } else {
+        console.log('No cardRef');
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [cardRef]);
+
   return (
-    <View style={styles.container}>
+    <View ref={cardRef} style={styles.container}>
       <Image
         source={require('@/assets/images/mcd_logo.svg')}
         style={styles.imageContainer}
         contentFit="contain"
       />
       <ThemedText type="title" style={styles.title}>
-        Disfruta de la experiencia McDonald's
+        Disfruta de la experiencia McDonald's®
       </ThemedText>
       <View style={styles.yellowLine} />
       <View style={styles.subtitleContainer}>
@@ -42,16 +85,15 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
           para disfrutarlo con quien tu elijas.
         </ThemedText>
       </View>
-
       <View style={styles.qrcontainer}>{memoizedQRCode}</View>
       <ThemedText type="defaultSemiBold" style={styles.description}>
         {coupon.description}
       </ThemedText>
       <Text style={styles.terms}>
-        Cupón canjebale en tus restaurantes McDonald's de Navarra y Andoain
+        Cupón canjeable en tus restaurantes McDonald's® de Navarra y Andoain
         desde el {getFormattedDate(valid_from)} hasta el{' '}
         {getFormattedDate(valid_until)}. No acumulable a otras ofertas y/o
-        promoción. No válido para pedidos de McDelivery ni quioscos de venta.
+        promoción. No válido para pedidos de McDelivery™ ni quioscos de venta.
         Consultar con el encargado.
       </Text>
     </View>
@@ -65,6 +107,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.light.tint,
+    position: 'absolute',
+    zIndex: -1,
   },
   yellowLine: {
     width: '100%',

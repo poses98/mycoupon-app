@@ -21,74 +21,76 @@ export default function CouponVisualizer({ coupon }: { coupon: ICoupon }) {
   console.log('coupon', coupon);
 
   return (
-    <View style={styles.container}>
-      {/*  <View>
+    <>
+      <View style={styles.container}>
+        {/*  <View>
         <AntDesign
           name="delete"
           size={24}
           color={Colors.light.redeemedCoupon}
         />
       </View> */}
-      <View style={styles.imageContainer}>
-        <ThemedText
-          type="subtitle"
-          style={redeemed ? styles.redeemedText : styles.notRedeemedText}
-        >
-          {statusText}
-        </ThemedText>
-        {memoizedQRCode}
-        <ThemedText type="form-label">{coupon._id}</ThemedText>
-      </View>
-      <View style={styles.infoContainer}>
-        <ThemedText type="defaultSemiBold" style={styles.title}>
-          {coupon.title}
-        </ThemedText>
-        <ThemedText type="default" style={styles.description}>
-          {coupon.description}
-        </ThemedText>
-        <ThemedText type="form-label" style={styles.headerText}>
-          Evento
-        </ThemedText>
-        <ThemedText type="defaultSemiBold">{coupon.event}</ThemedText>
-        {coupon.status === CouponStatus.REDEEMED && redeemed && (
-          <View
-            style={[
-              {
-                width: '70%',
-                borderRadius: 3,
-                justifyContent: 'center',
-                alignItems: 'center',
-              },
-            ]}
+        <View style={styles.imageContainer}>
+          <ThemedText
+            type="subtitle"
+            style={redeemed ? styles.redeemedText : styles.notRedeemedText}
           >
-            <ThemedText type="form-label" style={styles.headerText}>
-              Canjeado el día
-            </ThemedText>
-            <ThemedText type="defaultSemiBold">
-              {`${getFormattedDate(redeemedDate) || ''} a las ${
-                getFormattedTime(redeemedDate) || ''
-              }`}
-            </ThemedText>
-            <ThemedText type="form-label" style={styles.headerText}>
-              Validado por
-            </ThemedText>
-            <ThemedText type="defaultSemiBold">
-              {coupon.validated_by.name || 'No disponible'}
-            </ThemedText>
-            <ThemedText type="form-label" style={styles.headerText}>
-              Restaurante
-            </ThemedText>
-            <ThemedText type="defaultSemiBold">
-              {coupon.redeemed_at.code || 'No disponible'}
-            </ThemedText>
-          </View>
+            {statusText}
+          </ThemedText>
+          {memoizedQRCode}
+          <ThemedText type="form-label">{coupon._id}</ThemedText>
+        </View>
+        <View style={styles.infoContainer}>
+          <ThemedText type="defaultSemiBold" style={styles.title}>
+            {coupon.title}
+          </ThemedText>
+          <ThemedText type="default" style={styles.description}>
+            {coupon.description}
+          </ThemedText>
+          <ThemedText type="form-label" style={styles.headerText}>
+            Evento
+          </ThemedText>
+          <ThemedText type="defaultSemiBold">{coupon.event}</ThemedText>
+          {coupon.status === CouponStatus.REDEEMED && redeemed && (
+            <View
+              style={[
+                {
+                  width: '70%',
+                  borderRadius: 3,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                },
+              ]}
+            >
+              <ThemedText type="form-label" style={styles.headerText}>
+                Canjeado el día
+              </ThemedText>
+              <ThemedText type="defaultSemiBold">
+                {`${getFormattedDate(redeemedDate) || ''} a las ${
+                  getFormattedTime(redeemedDate) || ''
+                }`}
+              </ThemedText>
+              <ThemedText type="form-label" style={styles.headerText}>
+                Validado por
+              </ThemedText>
+              <ThemedText type="defaultSemiBold">
+                {coupon.validated_by.name || 'No disponible'}
+              </ThemedText>
+              <ThemedText type="form-label" style={styles.headerText}>
+                Restaurante
+              </ThemedText>
+              <ThemedText type="defaultSemiBold">
+                {coupon.redeemed_at.code || 'No disponible'}
+              </ThemedText>
+            </View>
+          )}
+        </View>
+        {coupon.status === CouponStatus.NOT_REDEEMED && (
+          <Button title="COMPARTIR" onPress={() => setSharing(true)} />
         )}
       </View>
-      {coupon.status === CouponStatus.NOT_REDEEMED && (
-        <Button title="COMPARTIR" onPress={() => setSharing(true)} />
-      )}
       {sharing && <ShareableCard coupon={coupon} />}
-    </View>
+    </>
   );
 }
 
@@ -100,6 +102,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   imageContainer: {
     alignItems: 'center',
