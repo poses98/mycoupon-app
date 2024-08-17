@@ -63,11 +63,6 @@ class AuthApi {
     }
   }
 
-  static async logout() {
-    await SecureStore.deleteItemAsync('accessToken');
-    await SecureStore.deleteItemAsync('refreshToken');
-  }
-
   static async changePassword(payload) {
     if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
       await AuthApi.refreshAccessToken();
