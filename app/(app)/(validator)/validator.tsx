@@ -87,7 +87,6 @@ export default function Validator() {
         couponData = storedCoupon;
       }
 
-      // Set the validated or retrieved coupon data
       setScannedCoupon(couponData);
     } catch (err: any) {
       Alert.alert('Error', err.message || 'Unknown error occurred', [
@@ -99,8 +98,6 @@ export default function Validator() {
           },
         },
       ]);
-    } finally {
-      setBusyRead(false); // Ensure busy state is cleared regardless of outcome
     }
   };
 
