@@ -56,19 +56,17 @@ export default function CouponVisualizer({
           color={Colors.light.redeemedCoupon}
         />
       </View> */}
-        <View style={styles.imageContainer}>
+        <View style={styles.infoContainer}>
+          <ThemedText type="form-label">{coupon._id}</ThemedText>
+
+          <ThemedText type="defaultSemiBold" style={styles.title}>
+            {coupon.title}
+          </ThemedText>
           <ThemedText
             type="subtitle"
             style={redeemed ? styles.redeemedText : styles.notRedeemedText}
           >
             {statusText}
-          </ThemedText>
-          {memoizedQRCode}
-          <ThemedText type="form-label">{coupon._id}</ThemedText>
-        </View>
-        <View style={styles.infoContainer}>
-          <ThemedText type="defaultSemiBold" style={styles.title}>
-            {coupon.title}
           </ThemedText>
           <ThemedText type="default" style={styles.description}>
             {coupon.description}
@@ -110,19 +108,20 @@ export default function CouponVisualizer({
               </ThemedText>
             </View>
           )}
+
+          {coupon.status === CouponStatus.NOT_REDEEMED && (
+            <Button
+              title={coupon.shared ? 'COMPARTIR DE NUEVO' : 'COMPARTIR'}
+              onPress={handleShare}
+              bgcolor={
+                coupon.shared
+                  ? Colors.light.redeemedBg
+                  : Colors.light.buttonYellow
+              }
+              textColor={coupon.shared ? 'white' : Colors.light.tint}
+            />
+          )}
         </View>
-        {coupon.status === CouponStatus.NOT_REDEEMED && (
-          <Button
-            title={coupon.shared ? 'COMPARTIR DE NUEVO' : 'COMPARTIR'}
-            onPress={handleShare}
-            bgcolor={
-              coupon.shared
-                ? Colors.light.redeemedBg
-                : Colors.light.buttonYellow
-            }
-            textColor={coupon.shared ? 'white' : Colors.light.tint}
-          />
-        )}
       </View>
       {sharing && <ShareableCard coupon={coupon} />}
     </>
@@ -144,8 +143,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 10,
   },
-  redeemedText: { color: Colors.light.redeemedCoupon, marginVertical: 10 },
-  notRedeemedText: { color: Colors.light.tint, marginVertical: 10 },
+  redeemedText: { color: Colors.light.redeemedCoupon, marginVertical: 5 },
+  notRedeemedText: { color: Colors.light.tint, marginVertical: 5 },
   infoContainer: {
     width: '100%',
     flexDirection: 'column',
