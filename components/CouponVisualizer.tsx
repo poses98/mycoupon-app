@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, Alert } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import QRCode from 'react-qr-code';
 import { ThemedText } from '@/components/ThemedText';
@@ -9,8 +9,15 @@ import { AntDesign } from '@expo/vector-icons';
 import Button from './Button';
 import { getFormattedDate, getFormattedTime } from '@/utils/dateUtils';
 import { ShareableCard } from './ShareableCard';
+import CouponApi from '@/api/coupon';
 
-export default function CouponVisualizer({ coupon }: { coupon?: ICoupon }) {
+export default function CouponVisualizer({
+  coupon,
+  onShare,
+}: {
+  coupon?: ICoupon;
+  onShare?: (id: string) => void;
+}) {
   if (!coupon) {
     return <></>;
   }
@@ -21,7 +28,23 @@ export default function CouponVisualizer({ coupon }: { coupon?: ICoupon }) {
   const memoizedQRCode = useMemo(() => {
     return <QRCode value={coupon._id} size={180} />;
   }, [coupon._id]);
-  console.log('coupon', coupon);
+
+  const handleShare = async () => {
+    setSharing(true);
+    try {
+      const result = await CouponApi.setSharedCoupon({ couponId: coupon._id });
+
+      if (result && onShare) {
+        setTimeout(() => {
+          onShare(coupon._id);
+        }, 1000);
+      } else {
+        throw new Error('Error al compartir el cupón');
+      }
+    } catch (e) {
+      Alert.alert('Error', 'Error al compartir el cupón');
+    }
+  };
 
   return (
     <>
@@ -89,7 +112,10 @@ export default function CouponVisualizer({ coupon }: { coupon?: ICoupon }) {
           )}
         </View>
         {coupon.status === CouponStatus.NOT_REDEEMED && (
-          <Button title="COMPARTIR" onPress={() => setSharing(true)} />
+          <Button
+            title={coupon.shared ? 'COMPARTIR DE NUEVO' : 'COMPARTIR'}
+            onPress={handleShare}
+          />
         )}
       </View>
       {sharing && <ShareableCard coupon={coupon} />}

@@ -99,6 +99,37 @@ class CouponApi {
     }
   }
 
+  static async setSharedCoupon(payload) {
+    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken'))) {
+      await AuthApi.refreshAccessToken();
+    }
+    const url = `${BASE_PATH}/${API_VERSION}/set-shared-coupon`;
+    const request = new Request(url, {
+      method: 'PUT',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+      }),
+      body: JSON.stringify(payload),
+    });
+
+    try {
+      const response = await fetch(request);
+      let responseData = await response.json();
+
+      if (response.status === 400) {
+        responseData.coupon.redeemed = true;
+        responseData = responseData.coupon;
+      } else if (response.status === 404) {
+        throw new Error('Coupon not found');
+      }
+
+      return responseData;
+    } catch (error) {
+      return null;
+    }
+  }
+
   static async getCouponsValidatedBy() {
     if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
       await AuthApi.refreshAccessToken();

@@ -15,4 +15,5 @@ export default interface ICoupon {
   event: string;
   is_selected?: boolean;
   redeemed?: boolean;
+  shared?: boolean;
 }

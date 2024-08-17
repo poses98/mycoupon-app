@@ -96,7 +96,6 @@ export default function Coupons() {
       } catch (e) {
         setIsSubmittingForm(false);
         Alert.alert('Error', 'No se pudo generar los cupones');
-        console.log(e);
       }
     } else {
       setIsSubmittingForm(false);

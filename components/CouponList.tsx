@@ -16,12 +16,15 @@ export default function CouponList({
   const [couponsByDate, setCouponsByDate] = useState<Record<string, any>>({});
   const [showingCoupon, setShowingCoupon] = useState<ICoupon | undefined>();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [couponsById, setCouponsById] = useState<Record<string, ICoupon>>({});
 
-  const couponsById = useMemo(() => {
-    return coupons.reduce((map, coupon) => {
-      map[coupon._id] = coupon;
-      return map;
-    }, {} as Record<string, ICoupon>);
+  useEffect(() => {
+    setCouponsById(
+      coupons.reduce((map, coupon) => {
+        map[coupon._id] = coupon;
+        return map;
+      }, {} as Record<string, ICoupon>)
+    );
   }, [coupons]);
 
   const memoizedCouponsByDate = useMemo(() => {
@@ -51,6 +54,7 @@ export default function CouponList({
       } else {
         couponDate[date].not_redeemed++;
       }
+
       couponDate[date].coupons.push(coupon);
     });
 
@@ -69,6 +73,31 @@ export default function CouponList({
     [couponsById]
   );
 
+  const onShare = useCallback(
+    (id: string) => {
+      setCouponsByDate((prevCouponsByDate) => {
+        const updatedCouponsByDate = { ...prevCouponsByDate };
+
+        for (const date in updatedCouponsByDate) {
+          const couponIndex = updatedCouponsByDate[date].coupons.findIndex(
+            (c: ICoupon) => c._id === id
+          );
+
+          if (couponIndex > -1) {
+            // Update the `shared` attribute
+            updatedCouponsByDate[date].coupons[couponIndex] = {
+              ...updatedCouponsByDate[date].coupons[couponIndex],
+              shared: true,
+            };
+            break;
+          }
+        }
+
+        return updatedCouponsByDate;
+      });
+    },
+    [couponsByDate]
+  );
   const handleModalVisibility = useCallback((visible: boolean | null) => {
     if (typeof visible === 'boolean') {
       setIsModalVisible(visible);
@@ -91,7 +120,7 @@ export default function CouponList({
         }}
         height
       >
-        <CouponVisualizer coupon={showingCoupon} />
+        <CouponVisualizer coupon={showingCoupon} onShare={onShare} />
       </CustomModal>
       {coupons.length === 0 ? (
         <Text style={{}}>No hay cupones</Text>

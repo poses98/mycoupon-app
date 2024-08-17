@@ -87,8 +87,6 @@ const styles = StyleSheet.create({
   titleContainer: {
     height: 50,
     backgroundColor: 'white',
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
     paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',

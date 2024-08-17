@@ -24,7 +24,6 @@ const CouponCard = React.memo(
     historyView?: boolean;
   }) => {
     const redeemedDate = new Date(coupon.redeemed_date);
-
     const redeemedHourStr = getFormattedTime(redeemedDate);
     return (
       <TouchableOpacity
@@ -49,6 +48,11 @@ const CouponCard = React.memo(
             <AntDesign name="check" size={20} color={Colors.light.selected} />
           </View>
         )}
+        {coupon.shared && !isSelected && (
+          <View style={styles.sharedBadge}>
+            <AntDesign name="sharealt" size={15} color={Colors.light.validBg} />
+          </View>
+        )}
         <View
           style={[
             coupon.status === CouponStatus.REDEEMED ? styles.lowOpacity : {},
@@ -71,6 +75,7 @@ const CouponCard = React.memo(
         {historyView && (
           <ThemedText type="form-label">{redeemedHourStr}</ThemedText>
         )}
+
         {
           <Text
             style={[
@@ -136,6 +141,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: Colors.light.selected,
     borderWidth: 1.6,
+    zIndex: 1,
+  },
+  sharedBadge: {
+    position: 'absolute',
+    top: -6,
+    right: -6,
+    borderRadius: 50,
+    backgroundColor: 'white',
+    borderColor: Colors.light.validBg,
+    borderWidth: 1.6,
+    padding: 2,
     zIndex: 1,
   },
 });

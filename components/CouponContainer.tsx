@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -137,7 +137,7 @@ export default function CouponContainer({
           initialNumToRender={28}
           scrollEnabled={false}
           getItemLayout={(data, index) => ({
-            length: 110, // or the height of your item
+            length: 110,
             offset: 100 * index,
             index,
           })}
