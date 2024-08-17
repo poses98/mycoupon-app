@@ -58,8 +58,15 @@ export default function Validator() {
       setBusyRead(true);
 
       // Decode the JWT token
-      const decodedToken: any = jwtDecode(data);
-      if (!decodedToken || !decodedToken.id) {
+      let decodedToken: any = null;
+
+      try {
+        decodedToken = jwtDecode(data);
+      } catch (err) {
+        throw new Error('Código QR inválido');
+      }
+
+      if (!decodedToken.id) {
         throw new Error('Código QR inválido');
       }
 
