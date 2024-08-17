@@ -94,11 +94,13 @@ export default function HomeScreen() {
                 </View>
               )}
             </View>
-            <Button
-              title="ACCEDER"
-              onPress={handleSubmit}
-              disabled={isSendingForm}
-            />
+            {!isSendingForm && (
+              <Button
+                title="ACCEDER"
+                onPress={handleSubmit}
+                disabled={isSendingForm}
+              />
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   formContent: {
-    width: '100%',
+    minWidth: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
