@@ -6,7 +6,7 @@ import {
   BarcodeScanningResult,
   Point,
 } from 'expo-camera';
-import { ObjectId } from 'bson';
+import { jwtDecode } from 'jwt-decode';
 import { Colors } from '@/constants/Colors';
 import Button from '@/components/Button';
 import { ThemedText } from '@/components/ThemedText';
@@ -55,11 +55,12 @@ export default function Validator() {
   const checkCoupon = async (data: string) => {
     try {
       setBusyRead(true);
-      if (!ObjectId.isValid(data)) {
+      const decodedToken: any = jwtDecode(data);
+      if (!decodedToken) {
         throw new Error('Código QR inválido');
       }
 
-      const storedCoupon = await CouponApi.getCouponById(data);
+      const storedCoupon = await CouponApi.getCouponById(decodedToken.id);
       if (storedCoupon === null) {
         throw new Error('Coupon not found');
       }
@@ -68,10 +69,10 @@ export default function Validator() {
       setIsCouponRedeemed(couponRedeemed);
       if (!couponRedeemed) {
         const couponValidation = await CouponApi.validateCoupon({
-          couponId: data,
+          token: data,
         });
-        if (couponValidation === null) {
-          throw new Error('Coupon not found');
+        if (!couponValidation.ok) {
+          throw new Error(couponValidation.error);
         }
         setScannedCoupon(couponValidation);
       } else {

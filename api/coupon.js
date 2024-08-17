@@ -90,12 +90,19 @@ class CouponApi {
         responseData.coupon.redeemed = true; // Add the field if the status is not 200
         responseData = responseData.coupon;
       } else if (response.status === 404) {
-        throw new Error('Coupon not found');
+        throw new Error('Cupón no encontrado. No entregar productos.');
+      } else if (response.status === 403) {
+        throw new Error(
+          'Código QR no autorizado. Posible estafador. No entregar productos.'
+        );
+      } else if (response.status !== 200) {
+        throw new Error('Error validando cupón. No entregar productos.');
       }
 
+      responseData.ok = true;
       return responseData;
     } catch (error) {
-      return null;
+      return { error: error.message, ok: false };
     }
   }
 

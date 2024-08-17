@@ -14,7 +14,7 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
   const memoizedQRCode = useMemo(() => {
     return (
       <QRCode
-        value={coupon._id}
+        value={coupon.token}
         size={180}
         fgColor={Colors.light.buttonYellow}
         bgColor={Colors.light.tint}

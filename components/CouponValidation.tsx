@@ -112,13 +112,13 @@ export default function CouponValidation({
             RESTAURANTE
           </ThemedText>
           <ThemedText type="subtitle" style={styles.sectionInfo}>
-            {coupon.redeemed_at.code}
+            {coupon.redeemed_at?.code}
           </ThemedText>
           <ThemedText type="default" style={styles.sectionHeader}>
             ENCARGADO
           </ThemedText>
           <ThemedText type="subtitle" style={styles.sectionInfo}>
-            {coupon.validated_by.name}
+            {coupon.validated_by?.name}
           </ThemedText>
         </View>
       )}
