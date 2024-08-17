@@ -115,6 +115,12 @@ export default function CouponVisualizer({
           <Button
             title={coupon.shared ? 'COMPARTIR DE NUEVO' : 'COMPARTIR'}
             onPress={handleShare}
+            bgcolor={
+              coupon.shared
+                ? Colors.light.redeemedBg
+                : Colors.light.buttonYellow
+            }
+            textColor={coupon.shared ? 'white' : Colors.light.tint}
           />
         )}
       </View>

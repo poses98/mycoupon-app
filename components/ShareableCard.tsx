@@ -45,6 +45,8 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
   };
 
   useEffect(() => {
+    console.log(coupon);
+
     const interval = setInterval(() => {
       if (cardRef.current) {
         cardRef.current.measure((x, y, width, height, pageX, pageY) => {
@@ -60,6 +62,20 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
 
     return () => clearInterval(interval);
   }, [cardRef]);
+
+  const formattedLocations = useMemo(() => {
+    const locations = coupon.is_valid_at.map(
+      (location: any) => `${location.name} (${location.province})`
+    );
+
+    if (locations.length > 1) {
+      return `${locations.slice(0, -1).join(', ')} y ${
+        locations[locations.length - 1]
+      }`;
+    }
+
+    return locations[0];
+  }, [coupon.is_valid_at]);
 
   return (
     <>
@@ -89,9 +105,23 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
         <ThemedText type="defaultSemiBold" style={styles.description}>
           {coupon.description}
         </ThemedText>
+        {coupon.event !== 'GENERAL' && (
+          <Text style={styles.terms}>
+            Este cupón forma parte de{' '}
+            <Text
+              style={[
+                styles.terms,
+                { fontWeight: 'bold', textTransform: 'uppercase' },
+              ]}
+            >
+              {coupon.event}.
+            </Text>
+          </Text>
+        )}
+
         <Text style={styles.terms}>
-          Cupón canjeable en tus restaurantes McDonald's® de Navarra y Andoain
-          desde el {getFormattedDate(valid_from)} hasta el{' '}
+          Cupón canjeable en tus restaurantes McDonald's® de{' '}
+          {formattedLocations} desde el {getFormattedDate(valid_from)} hasta el{' '}
           {getFormattedDate(valid_until)}. No acumulable a otras ofertas y/o
           promoción. No válido para pedidos de McDelivery™ ni quioscos de venta.
           Consultar con el encargado.
