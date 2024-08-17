@@ -45,8 +45,6 @@ export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
   };
 
   useEffect(() => {
-    console.log(coupon);
-
     const interval = setInterval(() => {
       if (cardRef.current) {
         cardRef.current.measure((x, y, width, height, pageX, pageY) => {
