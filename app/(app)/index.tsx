@@ -9,7 +9,7 @@ export default function Home() {
     <View style={styles.wrapper}>
       <ScrollView contentContainerStyle={styles.container}>
         <MenuCard
-          icon={require('@/assets/icons/qr-code.png')}
+          icon={require('@/assets/icons/codigo-qr.png')}
           title="VALIDAR"
           onClick={() => {
             router.navigate('/validator');
