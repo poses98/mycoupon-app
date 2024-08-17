@@ -114,10 +114,10 @@ export default function RootLayout() {
                 }}
               />
               <Drawer.Screen
-                name="help"
+                name="settings"
                 options={{
-                  title: 'MyCoupon',
-                  drawerLabel: 'Ayuda',
+                  title: 'Ajustes',
+                  drawerLabel: 'Ajustes',
                   headerTintColor: Colors.light.tint,
                   headerTitleStyle: {
                     fontWeight: 'bold',
@@ -125,10 +125,10 @@ export default function RootLayout() {
                 }}
               />
               <Drawer.Screen
-                name="settings"
+                name="help"
                 options={{
-                  title: 'Ajustes',
-                  drawerLabel: 'Ajustes',
+                  title: 'MyCoupon',
+                  drawerLabel: 'Ayuda',
                   headerTintColor: Colors.light.tint,
                   headerTitleStyle: {
                     fontWeight: 'bold',
