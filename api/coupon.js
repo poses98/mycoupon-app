@@ -78,9 +78,7 @@ class CouponApi {
       method: 'PUT',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${await SecureStore.getItemAsync(
-          'accessToken'
-        )}`,
+        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
       }),
       body: JSON.stringify(payload),
     });
