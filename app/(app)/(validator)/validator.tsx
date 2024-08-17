@@ -52,34 +52,45 @@ export default function Validator() {
     checkCoupon(data);
   };
 
+  /** Validator.tsx */
   const checkCoupon = async (data: string) => {
     try {
       setBusyRead(true);
+
+      // Decode the JWT token
       const decodedToken: any = jwtDecode(data);
-      if (!decodedToken) {
+      if (!decodedToken || !decodedToken.id) {
         throw new Error('Código QR inválido');
       }
 
+      // Retrieve the coupon by ID
       const storedCoupon = await CouponApi.getCouponById(decodedToken.id);
-      if (storedCoupon === null) {
-        throw new Error('Coupon not found');
+      if (!storedCoupon) {
+        throw new Error('Cupón no encontrado');
       }
 
+      // Check if the coupon has been redeemed
       const couponRedeemed = storedCoupon.status === CouponStatus.REDEEMED;
       setIsCouponRedeemed(couponRedeemed);
+
+      let couponData;
       if (!couponRedeemed) {
+        // Validate the coupon if it's not redeemed
         const couponValidation = await CouponApi.validateCoupon({
           token: data,
         });
         if (!couponValidation.ok) {
           throw new Error(couponValidation.error);
         }
-        setScannedCoupon(couponValidation);
+        couponData = couponValidation;
       } else {
-        setScannedCoupon(storedCoupon);
+        couponData = storedCoupon;
       }
+
+      // Set the validated or retrieved coupon data
+      setScannedCoupon(couponData);
     } catch (err: any) {
-      Alert.alert('Error', err.toString(), [
+      Alert.alert('Error', err.message || 'Unknown error occurred', [
         {
           text: 'OK',
           onPress: () => {
@@ -88,6 +99,8 @@ export default function Validator() {
           },
         },
       ]);
+    } finally {
+      setBusyRead(false); // Ensure busy state is cleared regardless of outcome
     }
   };
 
