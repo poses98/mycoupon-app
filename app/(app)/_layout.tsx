@@ -29,14 +29,6 @@ export default function RootLayout() {
   const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    if (user !== null) {
-      console.log('User is logged in');
-    } else {
-      console.log('User is not logged in');
-    }
-  }, [user]);
-
-  useEffect(() => {
     if (loaded && !isLoading) {
       SplashScreen.hideAsync();
     }
