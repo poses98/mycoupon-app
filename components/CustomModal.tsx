@@ -19,16 +19,8 @@ export default function CustomModal({
   height?: boolean;
   isForm?: boolean;
 }) {
-  const [visible, setVisible] = useState(isVisible);
-
-  useEffect(() => {
-    if (isVisible) {
-      setVisible(true);
-    }
-  }, [isVisible]);
-
   const handleClose = () => {
-    setVisible(false);
+    onClose();
   };
 
   return (
@@ -36,7 +28,7 @@ export default function CustomModal({
       animationType="slide"
       transparent={true}
       collapsable
-      visible={visible}
+      visible={isVisible}
       onRequestClose={handleClose}
       onDismiss={onClose}
     >
