@@ -48,11 +48,17 @@ const CouponCard = React.memo(
             <AntDesign name="check" size={20} color={Colors.light.selected} />
           </View>
         )}
-        {coupon.shared && !isSelected && (
-          <View style={styles.sharedBadge}>
-            <AntDesign name="sharealt" size={15} color={Colors.light.validBg} />
-          </View>
-        )}
+        {coupon.shared &&
+          !isSelected &&
+          coupon.status !== CouponStatus.REDEEMED && (
+            <View style={styles.sharedBadge}>
+              <AntDesign
+                name="sharealt"
+                size={15}
+                color={Colors.light.validBg}
+              />
+            </View>
+          )}
         <View
           style={[
             coupon.status === CouponStatus.REDEEMED ? styles.lowOpacity : {},
