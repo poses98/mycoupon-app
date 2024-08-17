@@ -72,40 +72,46 @@ class CouponApi {
     if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken'))) {
       await AuthApi.refreshAccessToken();
     }
+
     const url = `${BASE_PATH}/${API_VERSION}/validate-coupon`;
     const request = new Request(url, {
       method: 'PUT',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `Bearer ${await SecureStore.getItemAsync(
+          'accessToken'
+        )}`,
       }),
       body: JSON.stringify(payload),
     });
 
     try {
       const response = await fetch(request);
-      let responseData = await response.json();
+      const responseData = await response.json();
 
-      if (response.status === 400) {
-        responseData.coupon.redeemed = true; // Add the field if the status is not 200
-        responseData = responseData.coupon;
-      } else if (response.status === 404) {
-        throw new Error('Cupón no encontrado. No entregar productos.');
-      } else if (response.status === 403) {
-        throw new Error(
-          'Código QR no autorizado. Posible estafador. No entregar productos.'
-        );
-      } else if (response.status !== 200) {
-        throw new Error('Error validando cupón. No entregar productos.');
+      if (response.status === 200) {
+        return { ...responseData, ok: true };
       }
 
-      responseData.ok = true;
-      return responseData;
+      if (response.status === 400) {
+        return { ...responseData.coupon, redeemed: true, ok: true };
+      }
+
+      let errorMsg =
+        responseData.message || 'Error validando cupón. No entregar productos.';
+      if (response.status === 404) {
+        errorMsg =
+          responseData.message || 'Cupón no encontrado. No entregar productos.';
+      } else if (response.status === 403) {
+        errorMsg =
+          responseData.message || 'Cupón ha caducado. No entregar productos.';
+      }
+
+      throw new Error(errorMsg);
     } catch (error) {
       return { error: error.message, ok: false };
     }
   }
-
   static async setSharedCoupon(payload) {
     if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken'))) {
       await AuthApi.refreshAccessToken();
