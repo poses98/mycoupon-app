@@ -81,6 +81,7 @@ export default function Coupons() {
       try {
         const freshCoupons = await CouponApi.generateBatchCoupons(payload);
         setIsSubmittingForm(false);
+        handleModalVisibility(false);
 
         if (!freshCoupons) {
           Alert.alert('Error', 'No se pudo generar los cupones');
@@ -91,7 +92,6 @@ export default function Coupons() {
           } else {
             setCoupons(freshCoupons);
           }
-          handleModalVisibility(false);
         }
       } catch (e) {
         setIsSubmittingForm(false);
