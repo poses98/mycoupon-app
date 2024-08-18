@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Button, SafeAreaView, Text } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { View } from 'react-native-reanimated/lib/typescript/Animated';
 

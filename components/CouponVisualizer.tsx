@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import QRCode from 'react-qr-code';
 import { ThemedText } from '@/components/ThemedText';
 import ICoupon from '@/interfaces/ICoupon';
 import { CouponStatus } from '@/enums/CouponStatus';
-import { AntDesign } from '@expo/vector-icons';
 import Button from './Button';
 import { getFormattedDate, getFormattedTime } from '@/utils/dateUtils';
 import { ShareableCard } from './ShareableCard';

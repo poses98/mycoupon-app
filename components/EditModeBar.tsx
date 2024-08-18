@@ -1,6 +1,6 @@
 import { Colors } from '@/constants/Colors';
 import { AntDesign } from '@expo/vector-icons';
-import { View, StyleSheet, Text, Pressable } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function EditModeBar({

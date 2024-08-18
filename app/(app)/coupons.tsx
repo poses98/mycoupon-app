@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert } from 'react-native';
 import Button from '@/components/Button';
 import { Colors } from '@/constants/Colors';
 import CouponApi from '@/api/coupon';
 import ICoupon from '@/interfaces/ICoupon';
 import Loader from '@/components/Loader';
-import CouponContainer from '@/components/CouponContainer';
 import CustomModal from '@/components/CustomModal';
 import CreateCouponForm from '@/components/CreateCouponForm';
 import EditModeBar from '@/components/EditModeBar';
-import CouponVisualizer from '@/components/CouponVisualizer';
-import { CouponStatus } from '@/enums/CouponStatus';
 import CouponList from '@/components/CouponList';
 
 export default function Coupons() {

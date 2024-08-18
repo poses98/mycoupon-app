@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
+import { StyleSheet, Alert } from 'react-native';
 import ICoupon from '@/interfaces/ICoupon';
 import CouponApi from '@/api/coupon';
 import CouponList from '@/components/CouponList';

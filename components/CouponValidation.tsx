@@ -1,6 +1,5 @@
 import ICoupon from '@/interfaces/ICoupon';
 import { View, StyleSheet } from 'react-native';
-import { CouponStatus } from '@/enums/CouponStatus';
 import { Colors } from '@/constants/Colors';
 import { ThemedText } from './ThemedText';
 import { AntDesign } from '@expo/vector-icons';

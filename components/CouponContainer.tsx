@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,7 +12,6 @@ import { ThemedText } from '@/components/ThemedText';
 import ICoupon from '@/interfaces/ICoupon';
 import CouponCard from '@/components/CouponCard';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { act } from 'react-test-renderer';
 
 export default function CouponContainer({
   date,

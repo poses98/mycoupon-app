@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '@/components/Button';
 import InputWithLabel from './InputWithLabel';
