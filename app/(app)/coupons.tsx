@@ -136,13 +136,7 @@ export default function Coupons() {
               isSubmittingForm={isSubmittingForm}
             />
           </CustomModal>
-          {/*   <CustomModal
-            title={'View Coupon'}
-            isVisible={isModalVisible}
-            onClose={() => setIsModalVisible(false)}
-          >
-            <CouponVisualizer coupon={modalContent} />
-          </CustomModal> */}
+
           <CouponList coupons={coupons} />
         </ScrollView>
       )}
