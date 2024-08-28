@@ -7,15 +7,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import Button from './Button';
 
+interface CouponValidationProps {
+  coupon: ICoupon;
+  handleClose: () => void;
+  redeemed: boolean;
+}
+
 export default function CouponValidation({
   coupon,
   handleClose,
   redeemed,
-}: {
-  coupon: ICoupon;
-  handleClose: () => void;
-  redeemed: boolean;
-}) {
+}: CouponValidationProps) {
   const statusText = redeemed ? 'CUPÓN YA CANJEADO' : 'VALIDADO CON ÉXITO';
   const redeemedDate = new Date(coupon.redeemed_date);
   const redeemedDateStr = redeemedDate

@@ -10,13 +10,15 @@ import { getFormattedDate, getFormattedTime } from '@/utils/dateUtils';
 import { ShareableCard } from './ShareableCard';
 import CouponApi from '@/api/coupon';
 
+interface CouponVisualizerProps {
+  coupon?: ICoupon;
+  onShare?: (couponId: string) => void;
+}
+
 export default function CouponVisualizer({
   coupon,
   onShare,
-}: {
-  coupon?: ICoupon;
-  onShare?: (id: string) => void;
-}) {
+}: CouponVisualizerProps) {
   if (!coupon) {
     return <></>;
   }

@@ -2,6 +2,24 @@ import { TouchableOpacity } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
 
+interface ButtonProps {
+  title: string;
+  onPress: () => void;
+  disabled?: boolean;
+  bgcolor?: string;
+  borderColor?: string;
+  border?: boolean;
+  textColor?: string;
+  textWeight?: string;
+  borderRadius?: number;
+  width?: number;
+  marginVertical?: number;
+  position?: 'absolute' | 'relative';
+  bottom?: number;
+  top?: number;
+  height?: number;
+}
+
 export default function Button({
   title,
   onPress,
@@ -18,23 +36,7 @@ export default function Button({
   bottom,
   top,
   height,
-}: {
-  title: string;
-  onPress: () => void;
-  disabled?: boolean;
-  bgcolor?: string;
-  borderColor?: string;
-  border?: boolean;
-  textColor?: string;
-  textWeight?: string;
-  borderRadius?: number;
-  width?: number;
-  marginVertical?: number;
-  position?: 'absolute' | 'relative';
-  bottom?: number;
-  top?: number;
-  height?: number;
-}) {
+}: ButtonProps) {
   return (
     <TouchableOpacity
       style={{

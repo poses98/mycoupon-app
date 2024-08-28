@@ -4,6 +4,15 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Colors } from '@/constants/Colors';
 import { ThemedText } from './ThemedText';
 
+interface CustomModalProps {
+  isVisible: boolean;
+  children: React.ReactNode;
+  onClose: () => void;
+  title: string;
+  height?: boolean;
+  isForm?: boolean;
+}
+
 export default function CustomModal({
   isVisible,
   children,
@@ -11,14 +20,7 @@ export default function CustomModal({
   title,
   height,
   isForm,
-}: {
-  isVisible: boolean;
-  children: React.ReactNode;
-  onClose: () => void;
-  title: string;
-  height?: boolean;
-  isForm?: boolean;
-}) {
+}: CustomModalProps) {
   const handleClose = () => {
     onClose();
   };

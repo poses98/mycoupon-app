@@ -4,7 +4,11 @@ import useAuth from '@/hooks/useAuth';
 import { router } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 
-const LogoutButton = ({ color }: { color?: boolean }) => {
+interface LogoutButtonProps {
+  color?: boolean;
+}
+
+const LogoutButton = ({ color }: LogoutButtonProps) => {
   const { signOut } = useAuth();
   return (
     <TouchableOpacity

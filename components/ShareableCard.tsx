@@ -9,7 +9,11 @@ import { Colors } from '@/constants/Colors';
 import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 
-export const ShareableCard = ({ coupon }: { coupon: ICoupon }) => {
+interface ShareableCardProps {
+  coupon: ICoupon;
+}
+
+export const ShareableCard = ({ coupon }: ShareableCardProps) => {
   const cardRef = useRef<View>(null);
   const memoizedQRCode = useMemo(() => {
     return (

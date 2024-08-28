@@ -3,13 +3,15 @@ import { AntDesign } from '@expo/vector-icons';
 import { View, StyleSheet, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+interface EditModeBarProps {
+  closeEditMode: () => void;
+  isEditMode: boolean;
+}
+
 export default function EditModeBar({
   closeEditMode,
   isEditMode,
-}: {
-  closeEditMode: () => void;
-  isEditMode: boolean;
-}) {
+}: EditModeBarProps) {
   return (
     <View style={[styles.container, { display: isEditMode ? 'flex' : 'none' }]}>
       <TouchableOpacity onPress={closeEditMode}>

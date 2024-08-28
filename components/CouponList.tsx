@@ -6,13 +6,12 @@ import { CouponStatus } from '@/enums/CouponStatus';
 import CustomModal from './CustomModal';
 import CouponVisualizer from './CouponVisualizer';
 
-export default function CouponList({
-  coupons,
-  historyView,
-}: {
+interface CouponListProps {
   coupons: Array<ICoupon>;
   historyView?: boolean;
-}) {
+}
+
+export default function CouponList({ coupons, historyView }: CouponListProps) {
   const [couponsByDate, setCouponsByDate] = useState<Record<string, any>>({});
   const [showingCoupon, setShowingCoupon] = useState<ICoupon | undefined>();
   const [isModalVisible, setIsModalVisible] = useState(false);

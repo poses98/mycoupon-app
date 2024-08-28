@@ -10,7 +10,11 @@ interface IFormDataPassword {
   confirmNewPassword: string;
 }
 
-const FormChangePassword = ({ onClose }: { onClose: () => void }) => {
+interface FormChangePasswordProps {
+  onClose: () => void;
+}
+
+const FormChangePassword = ({ onClose }: FormChangePasswordProps) => {
   const [formData, setFormData] = useState<IFormDataPassword>({
     oldPassword: '',
     newPassword: '',

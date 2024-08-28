@@ -4,6 +4,20 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { Colors } from '@/constants/Colors';
 import React from 'react';
 
+interface InputWithLabelProps {
+  label?: string;
+  icon?: any;
+  secureTextEntry?: boolean;
+  onChange?: any;
+  value?: string;
+  autocapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  labelComponent?: React.ReactElement;
+  defaultValue?: string;
+  placeholder?: string;
+  inputComponent?: React.ReactElement;
+  labelFlexDirection?: 'row' | 'column';
+}
+
 export default function InputWithLabel({
   label,
   icon,
@@ -17,19 +31,7 @@ export default function InputWithLabel({
   inputComponent,
   labelFlexDirection,
   ...rest
-}: {
-  label?: string;
-  icon?: any;
-  secureTextEntry?: boolean;
-  onChange?: any;
-  value?: string;
-  autocapitalize?: 'none' | 'sentences' | 'words' | 'characters';
-  labelComponent?: React.ReactElement;
-  defaultValue?: string;
-  placeholder?: string;
-  inputComponent?: React.ReactElement;
-  labelFlexDirection?: 'row' | 'column';
-}) {
+}: InputWithLabelProps) {
   return (
     <View style={styles.container}>
       {label && !labelComponent && (

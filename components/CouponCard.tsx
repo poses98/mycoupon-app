@@ -8,6 +8,14 @@ import { AntDesign } from '@expo/vector-icons';
 import { getFormattedTime } from '../utils/dateUtils';
 import { Image } from 'expo-image';
 
+interface CouponCardProps {
+  coupon: ICoupon;
+  handleSelected?: (id: string) => void;
+  onPress: (id: string) => void;
+  isSelected?: boolean;
+  historyView?: boolean;
+}
+
 const CouponCard = React.memo(
   ({
     coupon,
@@ -15,13 +23,7 @@ const CouponCard = React.memo(
     onPress,
     isSelected,
     historyView,
-  }: {
-    coupon: ICoupon;
-    handleSelected?: (id: string) => void;
-    onPress: (id: string) => void;
-    isSelected?: boolean;
-    historyView?: boolean;
-  }) => {
+  }: CouponCardProps) => {
     const redeemedDate = new Date(coupon.redeemed_date);
     const redeemedHourStr = getFormattedTime(redeemedDate);
     return (

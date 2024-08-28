@@ -13,6 +13,19 @@ import ICoupon from '@/interfaces/ICoupon';
 import CouponCard from '@/components/CouponCard';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
+interface CouponContainerProps {
+  date: string;
+  couponsInADay: Array<ICoupon>;
+  handleSelected?: (id: string) => void;
+  setEditMode?: () => void;
+  isEditMode?: boolean;
+  selectedCoupons?: Set<string>;
+  onPressCouponCard: (id: string) => void;
+  activeCoupons?: number;
+  redeemedCoupons?: number;
+  historyView?: boolean;
+}
+
 export default function CouponContainer({
   date,
   couponsInADay,
@@ -24,18 +37,7 @@ export default function CouponContainer({
   activeCoupons,
   redeemedCoupons,
   historyView,
-}: {
-  date: string;
-  couponsInADay: Array<ICoupon>;
-  handleSelected?: (id: string) => void;
-  setEditMode?: () => void;
-  isEditMode?: boolean;
-  selectedCoupons?: Set<string>;
-  onPressCouponCard: (id: string) => void;
-  activeCoupons?: number;
-  redeemedCoupons?: number;
-  historyView?: boolean;
-}) {
+}: CouponContainerProps) {
   const [isOpened, setIsOpened] = useState(false);
   const [heightAnim] = useState(new Animated.Value(0));
 
