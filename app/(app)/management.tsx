@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import RestaurantApi from '@/api/restaurants';
 
 export default function Management() {
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const response = await RestaurantApi.getRestaurants();
+        console.log(response.response.restaurants);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchRestaurants();
+  }, []);
+
   return (
     <View style={styles.wrapper}>
       <ScrollView contentContainerStyle={styles.container}>

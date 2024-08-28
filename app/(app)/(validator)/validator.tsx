@@ -16,6 +16,7 @@ import ICoupon from '@/interfaces/ICoupon';
 import { CouponStatus } from '@/enums/CouponStatus';
 import { AntDesign } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function Validator() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -32,6 +33,7 @@ export default function Validator() {
   );
   const [isCouponRedeemed, setIsCouponRedeemed] = useState(true);
   const router = useRouter();
+  const isFocused = useIsFocused();
 
   if (!permission) {
     return (
@@ -148,7 +150,7 @@ export default function Validator() {
     <>
       <View style={styles.container}>
         {/**TODO add close button that navigate to home screen */}
-        {scannedCoupon === undefined && (
+        {scannedCoupon === undefined && isFocused && (
           <>
             <View style={styles.close}>
               <AntDesign
