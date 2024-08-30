@@ -4,7 +4,7 @@ import {
   ThemeProvider,
 } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Redirect, Stack } from 'expo-router';
+import { Redirect } from 'expo-router';
 import useAuth from '@/hooks/useAuth';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';

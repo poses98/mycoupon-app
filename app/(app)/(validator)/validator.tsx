@@ -54,12 +54,10 @@ export default function Validator() {
     checkCoupon(data);
   };
 
-  /** Validator.tsx */
   const checkCoupon = async (data: string) => {
     try {
       setBusyRead(true);
 
-      // Decode the JWT token
       let decodedToken: any = null;
 
       try {
