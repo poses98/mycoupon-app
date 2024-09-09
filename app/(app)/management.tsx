@@ -17,9 +17,7 @@ export default function Management() {
 
   return (
     <View style={styles.wrapper}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text>Management</Text>
-      </ScrollView>
+      <ScrollView contentContainerStyle={styles.container}></ScrollView>
     </View>
   );
 }
