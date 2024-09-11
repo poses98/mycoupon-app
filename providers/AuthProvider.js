@@ -32,7 +32,6 @@ export default function AuthProvider(props) {
             return true;
           } catch (err) {
             return false;
-            console.error(err);
           }
         }
       } catch (e) {
