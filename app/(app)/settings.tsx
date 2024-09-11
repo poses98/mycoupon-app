@@ -34,7 +34,8 @@ export default function Settings() {
             marginTop: 20,
           }}
         >
-          {process.env.EXPO_PUBLIC_APP_VERSION} by Pablo Osés
+          {`${process.env.EXPO_PUBLIC_APP_NAME} ${process.env.EXPO_PUBLIC_APP_VERSION}`}{' '}
+          by Pablo Osés
         </ThemedText>
         <CustomModal
           isVisible={isChangePasswordVisible}
