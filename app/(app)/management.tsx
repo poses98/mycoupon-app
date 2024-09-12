@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import RestaurantApi from '@/api/restaurants';
 import RestaurantDropdownHeader from '@/components/RestaurantDropdownHeader';
+import Loader from '@/components/Loader';
+import { AntDesign } from '@expo/vector-icons';
+import RestaurantOptionButton from '@/components/RestaurantOptionButton';
 
 export default function Management() {
-  const [restaurants, setRestaurants] = useState<any>([]);
+  const [restaurants, setRestaurants] = useState<any>(null);
+  const [selectedOption, setSelectedOption] = useState<string>('');
+  const [restaurantId, setRestaurantId] = useState('');
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
@@ -37,10 +48,15 @@ export default function Management() {
     setRestaurants(updatedRestaurants);
   };
 
+  const handleRestaurantPasswordChange = (id: string) => {
+    setRestaurantId(id);
+    setSelectedOption('password_change');
+  };
+
   return (
     <View style={styles.wrapper}>
       <ScrollView contentContainerStyle={styles.container}>
-        {restaurants &&
+        {restaurants !== null &&
           restaurants.map((restaurant: any) => (
             <View style={styles.restaurantWrapper}>
               <RestaurantDropdownHeader
@@ -54,12 +70,30 @@ export default function Management() {
                 key={restaurant._id}
               />
               {restaurant.isOpened && (
-                <View>
-                  <Text>Some content</Text>
+                <View style={styles.optionBox}>
+                  <RestaurantOptionButton
+                    buttonText="Gestionar empleados"
+                    onPress={() => console.log('Option button pressed')}
+                  />
+                  <RestaurantOptionButton
+                    buttonText="Gestionar restaurante"
+                    onPress={() => console.log('Option button pressed')}
+                  />
+                  <RestaurantOptionButton
+                    buttonText="Mostrar cupones canjeados en este restaurante"
+                    onPress={() => console.log('Option button pressed')}
+                  />
+                  <RestaurantOptionButton
+                    buttonText="Cambiar contraseña"
+                    onPress={() =>
+                      handleRestaurantPasswordChange(restaurant._id)
+                    }
+                  />
                 </View>
               )}
             </View>
           ))}
+        {restaurants === null && <Loader />}
       </ScrollView>
     </View>
   );
@@ -83,5 +117,10 @@ const styles = StyleSheet.create({
   restaurantWrapper: {
     width: '100%',
     marginBottom: 10,
+  },
+  optionBox: {
+    width: '100%',
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    borderRadius: 5,
   },
 });

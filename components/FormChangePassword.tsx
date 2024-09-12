@@ -11,10 +11,14 @@ interface IFormDataPassword {
 }
 
 interface FormChangePasswordProps {
+  restaurant?: boolean;
   onClose: () => void;
 }
 
-const FormChangePassword = ({ onClose }: FormChangePasswordProps) => {
+const FormChangePassword = ({
+  onClose,
+  restaurant,
+}: FormChangePasswordProps) => {
   const [formData, setFormData] = useState<IFormDataPassword>({
     oldPassword: '',
     newPassword: '',
@@ -38,7 +42,9 @@ const FormChangePassword = ({ onClose }: FormChangePasswordProps) => {
       return;
     } else {
       try {
-        const response = await AuthApi.changePassword(formData);
+        const response = restaurant
+          ? null
+          : await AuthApi.changePassword(formData);
         if (!response?.success) {
           throw new Error(response.message);
         } else {
