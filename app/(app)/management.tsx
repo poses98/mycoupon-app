@@ -11,11 +11,22 @@ import RestaurantDropdownHeader from '@/components/RestaurantDropdownHeader';
 import Loader from '@/components/Loader';
 import { AntDesign } from '@expo/vector-icons';
 import RestaurantOptionButton from '@/components/RestaurantOptionButton';
+import CustomModal from '@/components/CustomModal';
+import FormChangePassword from '@/components/FormChangePassword';
+
+interface IModalContent {
+  title: string;
+  content: React.ReactNode;
+}
 
 export default function Management() {
   const [restaurants, setRestaurants] = useState<any>(null);
   const [selectedOption, setSelectedOption] = useState<string>('');
   const [restaurantId, setRestaurantId] = useState('');
+  const [modalContent, setModalContent] = useState<IModalContent>({
+    title: '',
+    content: null,
+  });
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
@@ -48,13 +59,29 @@ export default function Management() {
     setRestaurants(updatedRestaurants);
   };
 
+  const handleModalClose = () => {
+    setModalContent({ title: '', content: null });
+  };
+
   const handleRestaurantPasswordChange = (id: string) => {
-    setRestaurantId(id);
-    setSelectedOption('password_change');
+    setModalContent({
+      title: 'Resetear contraseña',
+      content: (
+        <FormChangePassword onClose={handleModalClose} restaurant={id} />
+      ),
+    });
   };
 
   return (
     <View style={styles.wrapper}>
+      <CustomModal
+        title={modalContent.title}
+        isVisible={modalContent.content !== null}
+        children={modalContent.content}
+        onClose={() => setModalContent({ title: '', content: null })}
+        isForm
+      />
+
       <ScrollView contentContainerStyle={styles.container}>
         {restaurants !== null &&
           restaurants.map((restaurant: any) => (
@@ -84,7 +111,7 @@ export default function Management() {
                     onPress={() => console.log('Option button pressed')}
                   />
                   <RestaurantOptionButton
-                    buttonText="Cambiar contraseña"
+                    buttonText="Resetear contraseña"
                     onPress={() =>
                       handleRestaurantPasswordChange(restaurant._id)
                     }
