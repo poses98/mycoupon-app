@@ -63,9 +63,42 @@ export default function Management() {
     setModalContent({ title: '', content: null });
   };
 
-  const handleRestaurantPasswordChange = (id: string) => {
+  const handleRestaurantUpdatePress = (id: string) => {
+    const restaurant = restaurants?.find(
+      (restaurant: any) => restaurant._id === id
+    );
     setModalContent({
-      title: 'Resetear contraseña',
+      title: restaurant.name,
+      content: <Text>Restaurant management</Text>,
+    });
+  };
+
+  const handleCouponsPress = (id: string) => {
+    const restaurant = restaurants?.find(
+      (restaurant: any) => restaurant._id === id
+    );
+    setModalContent({
+      title: `Cupones canjeados en ${restaurant?.name}`,
+      content: <Text>Coupons</Text>,
+    });
+  };
+
+  const handleEmployeeManagementPress = (id: string) => {
+    const restaurant = restaurants?.find(
+      (restaurant: any) => restaurant._id === id
+    );
+    setModalContent({
+      title: `Empleados en ${restaurant?.name}`,
+      content: <Text>Employee management</Text>,
+    });
+  };
+
+  const handleRestaurantPasswordChange = (id: string) => {
+    const restaurant = restaurants?.find(
+      (restaurant: any) => restaurant._id === id
+    );
+    setModalContent({
+      title: `Resetear contraseña de ${restaurant?.name}`,
       content: (
         <FormChangePassword onClose={handleModalClose} restaurant={id} />
       ),
@@ -100,15 +133,17 @@ export default function Management() {
                 <View style={styles.optionBox}>
                   <RestaurantOptionButton
                     buttonText="Mostrar cupones canjeados en este restaurante"
-                    onPress={() => console.log('Option button pressed')}
+                    onPress={() => handleCouponsPress(restaurant._id)}
                   />
                   <RestaurantOptionButton
                     buttonText="Gestionar empleados"
-                    onPress={() => console.log('Option button pressed')}
+                    onPress={() =>
+                      handleEmployeeManagementPress(restaurant._id)
+                    }
                   />
                   <RestaurantOptionButton
                     buttonText="Gestionar restaurante"
-                    onPress={() => console.log('Option button pressed')}
+                    onPress={() => handleRestaurantUpdatePress(restaurant._id)}
                   />
                   <RestaurantOptionButton
                     buttonText="Resetear contraseña"
