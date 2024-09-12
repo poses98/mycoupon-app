@@ -99,15 +99,15 @@ export default function Management() {
               {restaurant.isOpened && (
                 <View style={styles.optionBox}>
                   <RestaurantOptionButton
+                    buttonText="Mostrar cupones canjeados en este restaurante"
+                    onPress={() => console.log('Option button pressed')}
+                  />
+                  <RestaurantOptionButton
                     buttonText="Gestionar empleados"
                     onPress={() => console.log('Option button pressed')}
                   />
                   <RestaurantOptionButton
                     buttonText="Gestionar restaurante"
-                    onPress={() => console.log('Option button pressed')}
-                  />
-                  <RestaurantOptionButton
-                    buttonText="Mostrar cupones canjeados en este restaurante"
                     onPress={() => console.log('Option button pressed')}
                   />
                   <RestaurantOptionButton
