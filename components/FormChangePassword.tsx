@@ -11,7 +11,7 @@ interface IFormDataPassword {
 }
 
 interface FormChangePasswordProps {
-  restaurant?: boolean;
+  restaurant?: string;
   onClose: () => void;
 }
 
@@ -60,11 +60,14 @@ const FormChangePassword = ({
 
   return (
     <View style={styles.formContainer}>
-      <InputWithLabel
-        label="Contraseña anterior"
-        secureTextEntry
-        onChange={setOldPassword}
-      />
+      {!restaurant && (
+        <InputWithLabel
+          label="Contraseña anterior"
+          secureTextEntry
+          onChange={setOldPassword}
+        />
+      )}
+
       <InputWithLabel
         label="Nueva contraseña"
         secureTextEntry
