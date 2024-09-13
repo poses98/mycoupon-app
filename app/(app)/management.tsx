@@ -13,6 +13,7 @@ import { AntDesign } from '@expo/vector-icons';
 import RestaurantOptionButton from '@/components/RestaurantOptionButton';
 import CustomModal from '@/components/CustomModal';
 import FormChangePassword from '@/components/FormChangePassword';
+import UpdateRestaurant from '@/components/UpdateRestaurant';
 
 interface IModalContent {
   title: string;
@@ -69,7 +70,13 @@ export default function Management() {
     );
     setModalContent({
       title: restaurant.name,
-      content: <Text>Restaurant management</Text>,
+      content: (
+        <UpdateRestaurant
+          onSubmit={() => {}}
+          restaurant={restaurant}
+          isSubmittingForm={false}
+        />
+      ),
     });
   };
 
@@ -124,9 +131,7 @@ export default function Management() {
                 city={restaurant.city}
                 code={restaurant.code}
                 onPress={() => handleRestaurantOpen(restaurant._id)}
-                onEditPress={() => {
-                  /**Handle edit press */
-                }}
+                onEditPress={() => handleRestaurantUpdatePress(restaurant._id)}
                 key={restaurant._id}
               />
               {restaurant.isOpened && (

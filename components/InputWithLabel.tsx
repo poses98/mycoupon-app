@@ -15,7 +15,8 @@ interface InputWithLabelProps {
   defaultValue?: string;
   placeholder?: string;
   inputComponent?: React.ReactElement;
-  labelFlexDirection?: 'row' | 'column';
+  labelFlexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
+  labelJustifyContent?: 'space-between' | 'flex-start' | 'flex-end';
 }
 
 export default function InputWithLabel({
@@ -30,6 +31,7 @@ export default function InputWithLabel({
   placeholder,
   inputComponent,
   labelFlexDirection,
+  labelJustifyContent,
   ...rest
 }: InputWithLabelProps) {
   return (
@@ -42,6 +44,7 @@ export default function InputWithLabel({
           style={[
             styles.labelContainer,
             { flexDirection: labelFlexDirection || 'row' },
+            { justifyContent: labelJustifyContent || 'space-between' },
           ]}
         >
           <ThemedText type="form-label">{label}</ThemedText>
@@ -101,8 +104,8 @@ const styles = StyleSheet.create({
   },
   labelContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
     marginBottom: 5,
     alignContent: 'center',
+    alignItems: 'center',
   },
 });
