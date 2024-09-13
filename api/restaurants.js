@@ -22,6 +22,42 @@ class RestaurantApi {
       return error;
     }
   }
+
+  static async setPassword(password, restaurantId) {
+    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+      await AuthApi.refreshAccessToken();
+    const url = `${BASE_PATH}/${API_VERSION}/set-restaurant-password/`;
+    const request = new Request(url, {
+      method: 'PUT',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+      }),
+      body: JSON.stringify({
+        newPassword: password,
+        confirmNewPassword: password,
+        restaurantId,
+      }),
+    });
+    try {
+      const response = await fetch(request);
+      if (response.status === 403) {
+        console.log(response);
+        throw new Error(response.message);
+      } else if (response.status === 400) {
+        console.log(response);
+        throw new Error(response.message);
+      } else if (response.status !== 200) {
+        console.log(response);
+        throw new Error(response.message);
+      }
+      const responseData = await response.json();
+      responseData.success = true;
+      return responseData;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default RestaurantApi;

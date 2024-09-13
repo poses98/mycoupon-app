@@ -3,6 +3,7 @@ import InputWithLabel from './InputWithLabel';
 import { useState } from 'react';
 import Button from './Button';
 import AuthApi from '@/api/AuthApi';
+import RestaurantApi from '@/api/restaurants';
 
 interface IFormDataPassword {
   oldPassword: string;
@@ -43,7 +44,7 @@ const FormChangePassword = ({
     } else {
       try {
         const response = restaurant
-          ? null
+          ? await RestaurantApi.setPassword(formData.newPassword, restaurant)
           : await AuthApi.changePassword(formData);
         if (!response?.success) {
           throw new Error(response.message);
@@ -52,7 +53,8 @@ const FormChangePassword = ({
             { text: 'OK', onPress: onClose },
           ]);
         }
-      } catch (e: unknown) {
+      } catch (e) {
+        console.log(e);
         Alert.alert('Error', 'No se ha podido cambiar la contraseña');
       }
     }
