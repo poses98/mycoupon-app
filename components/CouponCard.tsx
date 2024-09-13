@@ -13,7 +13,7 @@ interface CouponCardProps {
   handleSelected?: (id: string) => void;
   onPress: (id: string) => void;
   isSelected?: boolean;
-  historyView?: boolean;
+  historyView?: boolean /**This variable tells if the couponcard is being rendered in the history screen */;
 }
 
 const CouponCard = React.memo(
