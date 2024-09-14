@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import RestaurantApi from '@/api/restaurants';
 import RestaurantDropdownHeader from '@/components/RestaurantDropdownHeader';
 import Loader from '@/components/Loader';
-import { AntDesign } from '@expo/vector-icons';
 import RestaurantOptionButton from '@/components/RestaurantOptionButton';
 import CustomModal from '@/components/CustomModal';
 import FormChangePassword from '@/components/FormChangePassword';
@@ -22,8 +15,6 @@ interface IModalContent {
 
 export default function Management() {
   const [restaurants, setRestaurants] = useState<any>(null);
-  const [selectedOption, setSelectedOption] = useState<string>('');
-  const [restaurantId, setRestaurantId] = useState('');
   const [modalContent, setModalContent] = useState<IModalContent>({
     title: '',
     content: null,
@@ -40,8 +31,6 @@ export default function Management() {
             return { ...element, isOpened: false };
           }
         );
-        console.log(restaurants);
-
         setRestaurants(restaurants);
       } catch (e) {
         console.log(e);
@@ -125,14 +114,13 @@ export default function Management() {
       <ScrollView contentContainerStyle={styles.container}>
         {restaurants !== null &&
           restaurants.map((restaurant: any) => (
-            <View style={styles.restaurantWrapper}>
+            <View style={styles.restaurantWrapper} key={restaurant._id}>
               <RestaurantDropdownHeader
                 restaurantName={restaurant.name}
                 city={restaurant.city}
                 code={restaurant.code}
                 onPress={() => handleRestaurantOpen(restaurant._id)}
                 onEditPress={() => handleRestaurantUpdatePress(restaurant._id)}
-                key={restaurant._id}
               />
               {restaurant.isOpened && (
                 <View style={styles.optionBox}>
