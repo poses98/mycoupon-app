@@ -54,11 +54,16 @@ class AuthApi {
 
       const response = await fetch(request);
       const tokens = await response.json();
+      if (response.status !== 200) {
+        throw tokens;
+      }
       await SecureStore.setItemAsync('accessToken', tokens.accessToken);
       await SecureStore.setItemAsync('refreshToken', tokens.refreshToken);
       return tokens;
     } catch (error) {
       console.log(error);
+      await SecureStore.deleteItemAsync('accessToken');
+      await SecureStore.deleteItemAsync('refreshToken');
       return error;
     }
   }
