@@ -61,9 +61,9 @@ export default function Management() {
       title: restaurant.name,
       content: (
         <UpdateRestaurant
-          onSubmit={() => {}}
           restaurant={restaurant}
           isSubmittingForm={false}
+          onSubmit={handleModalClose}
         />
       ),
     });

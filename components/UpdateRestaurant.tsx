@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Button from '@/components/Button';
 import InputWithLabel from './InputWithLabel';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -7,33 +7,49 @@ import { Colors } from '@/constants/Colors';
 import Checkbox from 'expo-checkbox';
 import IRestaurant from '@/interfaces/IRestaurant';
 import { ThemedText } from './ThemedText';
+import RestaurantApi from '@/api/restaurants';
 
 interface RestaurantFormProps {
-  onSubmit: () => void;
   isSubmittingForm: boolean;
   restaurant: IRestaurant;
+  onSubmit: () => void;
 }
 
 const UpdateRestaurant: React.FC<RestaurantFormProps> = ({
-  onSubmit,
   isSubmittingForm,
   restaurant,
+  onSubmit,
 }) => {
   const [alias, setAlias] = useState(restaurant.name || '');
-  const [description, setDescription] = useState(restaurant.description || '');
   const [hasBreakfast, setHasBreakfast] = useState(
     restaurant.has_breakfast || false
   );
-  const [address, setAddress] = useState(restaurant.address || '');
   const [city, setCity] = useState(restaurant.city || '');
-  const [orovince, setProvince] = useState(restaurant.province || '');
+  const [province, setProvince] = useState(restaurant.province || '');
   const [submitSent, setSubmitSent] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setSubmitSent(true);
-    const formData = {};
+    const formData = {
+      name: alias !== restaurant.name ? alias : undefined,
+      has_breakfast:
+        hasBreakfast !== restaurant.has_breakfast ? hasBreakfast : undefined,
+      city: city !== restaurant.city ? city : undefined,
+      province: province !== restaurant.province ? province : undefined,
+    };
 
-    onSubmit();
+    // Call to the API to update the restaurant
+    const updatedRestaurant: any = await RestaurantApi.updateRestaurant(
+      restaurant._id,
+      formData
+    );
+
+    if (!updatedRestaurant.success) {
+      Alert.alert('Error', 'Ha ocurrido un error al actualizar el restaurante');
+    } else {
+      Alert.alert('Éxito', 'Restaurante actualizado correctamente');
+      onSubmit();
+    }
     setTimeout(() => {
       setSubmitSent(false);
     }, 1000);
@@ -58,7 +74,7 @@ const UpdateRestaurant: React.FC<RestaurantFormProps> = ({
 
       <InputWithLabel
         label="Provincia"
-        value={orovince}
+        value={province}
         onChange={setProvince}
         placeholder="Provincia"
       />
