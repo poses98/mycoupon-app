@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native';
 import RestaurantApi from '@/api/restaurants';
 import RestaurantDropdownHeader from '@/components/RestaurantDropdownHeader';
 import Loader from '@/components/Loader';
@@ -7,6 +7,8 @@ import RestaurantOptionButton from '@/components/RestaurantOptionButton';
 import CustomModal from '@/components/CustomModal';
 import FormChangePassword from '@/components/FormChangePassword';
 import UpdateRestaurant from '@/components/UpdateRestaurant';
+import CouponApi from '@/api/coupon';
+import CouponList from '@/components/CouponList';
 
 interface IModalContent {
   title: string;
@@ -69,13 +71,34 @@ export default function Management() {
     });
   };
 
-  const handleCouponsPress = (id: string) => {
+  const handleCouponsPress = async (id: string) => {
     const restaurant = restaurants?.find(
       (restaurant: any) => restaurant._id === id
     );
     setModalContent({
       title: `Cupones canjeados en ${restaurant?.name}`,
-      content: <Text>Coupons</Text>,
+      content: <Loader />,
+    });
+    const couponsFetched = await CouponApi.getValidatedCouponsByRestaurant(
+      restaurant._id
+    );
+    if (couponsFetched.error) {
+      Alert.alert('Error', 'No se pudieron obtener los cupones');
+    }
+
+    setModalContent({
+      title: `Cupones canjeados en ${restaurant?.name}`,
+      content: (
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: 10,
+            paddingTop: 5,
+            paddingBottom: 40,
+          }}
+        >
+          <CouponList coupons={couponsFetched} historyView />
+        </ScrollView>
+      ),
     });
   };
 

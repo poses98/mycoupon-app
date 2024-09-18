@@ -58,7 +58,6 @@ class CouponApi {
       }),
       body: JSON.stringify(payload),
     });
-    console.log('request', request);
 
     try {
       const response = await fetch(request);
@@ -110,6 +109,7 @@ class CouponApi {
       return { error: error.message, ok: false };
     }
   }
+
   static async setSharedCoupon(payload) {
     if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken'))) {
       await AuthApi.refreshAccessToken();
@@ -153,7 +153,34 @@ class CouponApi {
       }),
     });
 
-    console.log('request', request);
+    try {
+      const response = await fetch(request);
+
+      if (response.status !== 200) {
+        throw new Error('Error getting coupons');
+      }
+
+      let responseData = await response.json();
+
+      return responseData;
+    } catch (error) {
+      console.error('error', error);
+
+      return null;
+    }
+  }
+
+  static async getValidatedCouponsByRestaurant(restaurantId) {
+    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+      await AuthApi.refreshAccessToken();
+    const url = `${BASE_PATH}/${API_VERSION}/coupons-by-restaurant/${restaurantId}`;
+    const request = new Request(url, {
+      method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+      }),
+    });
 
     try {
       const response = await fetch(request);
