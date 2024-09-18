@@ -26,13 +26,21 @@ export default function RootLayout() {
     ArialRonded: require('@/assets/fonts/ArialRoundedMTBold.ttf'),
   });
 
-  const { user, isLoading } = useAuth();
+  const { user, restaurant, isLoading } = useAuth();
 
   useEffect(() => {
     if (loaded && !isLoading) {
       SplashScreen.hideAsync();
     }
   }, [loaded, isLoading]);
+
+  useEffect(() => {
+    if (user === null && restaurant === null) {
+      SplashScreen.hideAsync();
+    }
+    console.log('user', user);
+    console.log('restaurant', restaurant);
+  }, [user, restaurant]);
 
   if (!loaded || isLoading) {
     return (
@@ -42,7 +50,106 @@ export default function RootLayout() {
     );
   }
 
-  if (!isLoading && user !== null) {
+  if (!isLoading && user !== null && restaurant === null) {
+    return (
+      <AuthProvider>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Drawer
+              drawerContent={(props) => {
+                return <CustomDrawerContent {...props} />;
+              }}
+              screenOptions={{
+                drawerActiveTintColor: 'rgba(255, 255, 255, 0.1)',
+                drawerLabelStyle: {
+                  color: '#fff',
+                  fontSize: 22,
+                },
+                drawerItemStyle: {
+                  backgroundColor: 'transparent',
+                },
+                drawerStyle: {
+                  backgroundColor: Colors.light.tint,
+                },
+                headerTintColor: Colors.light.tint,
+                headerTitleStyle: {
+                  fontWeight: 'bold',
+                },
+              }}
+            >
+              <Drawer.Screen
+                name="index"
+                options={{
+                  title: 'MyCoupon',
+                  drawerLabel: 'Inicio',
+                }}
+              />
+
+              <Drawer.Screen
+                name="(validator)"
+                options={{
+                  title: 'Validador',
+                  drawerLabel: 'Validador',
+                  headerTintColor: Colors.light.tint,
+                  headerTitleStyle: {
+                    fontWeight: 'bold',
+                  },
+                  headerShown: false,
+                }}
+              />
+              <Drawer.Screen
+                name="coupons"
+                options={{
+                  title: 'MyCoupon',
+                  drawerLabel: 'Cupones',
+                  headerTintColor: Colors.light.tint,
+                  headerTitleStyle: {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
+              <Drawer.Screen
+                name="management"
+                options={{
+                  title: 'MyCoupon',
+                  drawerLabel: 'Gestión',
+                  headerTintColor: Colors.light.tint,
+                  headerTitleStyle: {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
+              <Drawer.Screen
+                name="settings"
+                options={{
+                  title: 'Ajustes',
+                  drawerLabel: 'Ajustes',
+                  headerTintColor: Colors.light.tint,
+                  headerTitleStyle: {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
+
+              <Drawer.Screen
+                name="help"
+                options={{
+                  title: 'MyCoupon',
+                  drawerLabel: 'Ayuda',
+                  headerTintColor: Colors.light.tint,
+                  headerTitleStyle: {
+                    fontWeight: 'bold',
+                  },
+                }}
+              />
+            </Drawer>
+          </GestureHandlerRootView>
+        </ThemeProvider>
+      </AuthProvider>
+    );
+  } else if (!isLoading && user === null && restaurant !== null) {
     return (
       <AuthProvider>
         <ThemeProvider
@@ -88,29 +195,6 @@ export default function RootLayout() {
                     fontWeight: 'bold',
                   },
                   headerShown: false,
-                }}
-              />
-              <Drawer.Screen
-                name="coupons"
-                options={{
-                  title: 'MyCoupon',
-                  drawerLabel: 'Cupones',
-                  headerTintColor: Colors.light.tint,
-                  headerTitleStyle: {
-                    fontWeight: 'bold',
-                  },
-                }}
-              />
-
-              <Drawer.Screen
-                name="management"
-                options={{
-                  title: 'MyCoupon',
-                  drawerLabel: 'Gestión',
-                  headerTintColor: Colors.light.tint,
-                  headerTitleStyle: {
-                    fontWeight: 'bold',
-                  },
                 }}
               />
               <Drawer.Screen

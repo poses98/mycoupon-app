@@ -99,7 +99,11 @@ export default function AuthProvider(props) {
         } else {
           try {
             const userToken = jwtDecode(accessToken);
-            setUser(userToken);
+            if (userToken.role === 'restaurant') {
+              setRestaurant(userToken);
+            } else {
+              setUser(userToken);
+            }
             setIsLoading(false);
           } catch (err) {
             console.error(err);
@@ -120,7 +124,7 @@ export default function AuthProvider(props) {
 
   return (
     <AuthContext.Provider
-      value={{ user, signIn, isLoading, signOut, restaurantSignIn }}
+      value={{ user, restaurant, signIn, isLoading, signOut, restaurantSignIn }}
     >
       {children}
     </AuthContext.Provider>
