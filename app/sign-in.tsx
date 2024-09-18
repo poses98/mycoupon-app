@@ -7,6 +7,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { Image } from 'expo-image';
@@ -19,24 +20,53 @@ import { router } from 'expo-router';
 
 export default function HomeScreen() {
   const [userData, setUserData] = useState({ username: '', password: '' });
+  const [restaurantData, setRestaurantData] = useState({
+    code: '',
+    password: '',
+  });
   const [isSendingForm, setIsSendingForm] = useState(false);
-  const { signIn } = useAuth();
+  const [isRestaurant, setIsRestaurant] = useState(false);
+  const { signIn, restaurantSignIn } = useAuth();
 
   const handleSubmit = async () => {
-    if (userData.username !== '' && userData.password !== '') {
-      setIsSendingForm(true);
-      const signedIn = await signIn(userData.username, userData.password);
-      if (signedIn) {
-        router.replace('/');
+    if (!isRestaurant) {
+      if (userData.username !== '' && userData.password !== '') {
+        setIsSendingForm(true);
+        const signedIn = await signIn(userData.username, userData.password);
+        if (signedIn) {
+          router.replace('/');
+        } else {
+          Alert.alert('Atención', 'Usuario o contraseña incorrectos');
+          setIsSendingForm(false);
+        }
       } else {
-        Alert.alert('Atención', 'Usuario o contraseña incorrectos');
-        setIsSendingForm(false);
+        Alert.alert('Atención', 'Por favor, rellene todos los campos');
       }
     } else {
-      Alert.alert('Atención', 'Por favor, rellene todos los campos');
+      if (restaurantData.code !== '' && restaurantData.password !== '') {
+        setIsSendingForm(true);
+        console.log(restaurantData);
+
+        const signedIn = await restaurantSignIn(
+          restaurantData.code,
+          restaurantData.password
+        );
+        if (signedIn) {
+          Alert.alert('Success', 'Acceso correcto');
+          router.replace('/');
+        } else {
+          Alert.alert('Atención', 'Usuario o contraseña incorrectos');
+          setIsSendingForm(false);
+        }
+      } else {
+        Alert.alert('Atención', 'Por favor, rellene todos los campos');
+      }
     }
   };
 
+  const handleRestaurantModeChange = async () => {
+    setIsRestaurant((prevState) => !prevState);
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -67,28 +97,54 @@ export default function HomeScreen() {
             <ThemedText type="subtitle" style={styles.subtitle}>
               Iniciar Sesión
             </ThemedText>
+
             <View style={styles.formContent}>
               {isSendingForm ? (
                 <ActivityIndicator size="large" color={Colors.light.tint} />
               ) : (
                 <View>
+                  <TouchableOpacity onPress={handleRestaurantModeChange}>
+                    <ThemedText
+                      type="default"
+                      style={{
+                        textAlign: 'center',
+                        textDecorationLine: 'underline',
+                      }}
+                    >
+                      {isRestaurant
+                        ? 'Acceso franquiciado'
+                        : 'Acceso restaurante'}
+                    </ThemedText>
+                  </TouchableOpacity>
                   <InputWithLabel
-                    label="USUARIO"
-                    icon={'user'}
-                    onChange={(text: string) =>
-                      setUserData({ ...userData, username: text })
+                    label={isRestaurant ? 'CÓDIGO RESTAURANTE' : 'USUARIO'}
+                    icon={isRestaurant ? 'idcard' : 'user'}
+                    onChange={(text: string) => {
+                      if (!isRestaurant) {
+                        setUserData({ ...userData, username: text });
+                      } else {
+                        setRestaurantData({ ...restaurantData, code: text });
+                      }
+                    }}
+                    value={
+                      isRestaurant ? restaurantData.code : userData.username
                     }
-                    value={userData.username}
                     autocapitalize="none"
                   />
                   <InputWithLabel
                     label="CONTRASEÑA"
                     icon={'lock'}
                     secureTextEntry
-                    onChange={(e: string) =>
-                      setUserData({ ...userData, password: e })
+                    onChange={(e: string) => {
+                      if (!isRestaurant) {
+                        setUserData({ ...userData, password: e });
+                      } else {
+                        setRestaurantData({ ...restaurantData, password: e });
+                      }
+                    }}
+                    value={
+                      isRestaurant ? restaurantData.password : userData.password
                     }
-                    value={userData.password}
                     autocapitalize="none"
                   />
                 </View>

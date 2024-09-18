@@ -9,6 +9,7 @@ export default function AuthProvider(props) {
   const { children } = props;
 
   const [user, setUser] = useState(null);
+  const [restaurant, setRestaurant] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -29,6 +30,36 @@ export default function AuthProvider(props) {
             await setSecureItem('refreshToken', data.refreshToken);
             const userToken = jwtDecode(data.accessToken);
             setUser(userToken);
+            return true;
+          } catch (err) {
+            return false;
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  const restaurantSignIn = async (code, password) => {
+    console.log('Restaurant sign in');
+
+    if (!code || !password) {
+      return false;
+    } else {
+      try {
+        const data = await AuthApi.restaurantLogin({ code, password });
+        console.log(data);
+
+        if (!data) {
+          return false;
+        } else {
+          try {
+            await setSecureItem('accessToken', data.accessToken);
+            await setSecureItem('refreshToken', data.refreshToken);
+            const restaurantToken = jwtDecode(data.accessToken);
+
+            setRestaurant(restaurantToken);
             return true;
           } catch (err) {
             return false;
@@ -88,7 +119,9 @@ export default function AuthProvider(props) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, signIn, isLoading, signOut }}>
+    <AuthContext.Provider
+      value={{ user, signIn, isLoading, signOut, restaurantSignIn }}
+    >
       {children}
     </AuthContext.Provider>
   );

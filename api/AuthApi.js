@@ -17,10 +17,35 @@ class AuthApi {
       }),
       body: JSON.stringify(payload),
     });
-    console.log('Login user');
 
     try {
       const response = await fetch(request);
+      return await response.json();
+    } catch (error) {
+      return error;
+    }
+  }
+
+  static async restaurantLogin(credentials) {
+    const url = `${BASE_PATH}/${API_VERSION}/restaurant/login`;
+
+    const payload = {
+      code: credentials.code,
+      password: credentials.password,
+    };
+    const request = new Request(url, {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      body: JSON.stringify(payload),
+    });
+    console.log('Sending request', request);
+
+    try {
+      const response = await fetch(request);
+      console.log('Response', response);
+
       return await response.json();
     } catch (error) {
       return error;
