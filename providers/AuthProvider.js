@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react';
-import * as SecureStore from 'expo-secure-store';
+import StorageManager from '@/utils/storageManager';
 import { jwtDecode } from 'jwt-decode';
 import AuthApi from '@/api/AuthApi';
 
@@ -26,8 +26,11 @@ export default function AuthProvider(props) {
           return false;
         } else {
           try {
-            await setSecureItem('accessToken', data.accessToken);
-            await setSecureItem('refreshToken', data.refreshToken);
+            await StorageManager.setItemAsync('accessToken', data.accessToken);
+            await StorageManager.setItemAsync(
+              'refreshToken',
+              data.refreshToken
+            );
             const userToken = jwtDecode(data.accessToken);
             setUser(userToken);
             return true;
@@ -55,8 +58,11 @@ export default function AuthProvider(props) {
           return false;
         } else {
           try {
-            await setSecureItem('accessToken', data.accessToken);
-            await setSecureItem('refreshToken', data.refreshToken);
+            await StorageManager.setItemAsync('accessToken', data.accessToken);
+            await StorageManager.setItemAsync(
+              'refreshToken',
+              data.refreshToken
+            );
             const restaurantToken = jwtDecode(data.accessToken);
 
             setRestaurant(restaurantToken);
@@ -71,10 +77,6 @@ export default function AuthProvider(props) {
     }
   };
 
-  const setSecureItem = async (key, value) => {
-    await SecureStore.setItemAsync(key, value);
-  };
-
   const getUser = () => {
     return user;
   };
@@ -82,12 +84,14 @@ export default function AuthProvider(props) {
   const checkUserLogin = async () => {
     try {
       if (!user) {
-        const accessToken = await SecureStore.getItemAsync('accessToken');
+        const accessToken = await StorageManager.getItemAsync('accessToken');
         if (!accessToken) {
           setIsLoading(false);
           return false;
         } else if (AuthApi.isTokenExpired(accessToken)) {
-          const refreshToken = await SecureStore.getItemAsync('refreshToken');
+          const refreshToken = await StorageManager.getItemAsync(
+            'refreshToken'
+          );
           if (!AuthApi.isTokenExpired(refreshToken)) {
             await AuthApi.refreshAccessToken();
             checkUserLogin();
@@ -113,12 +117,13 @@ export default function AuthProvider(props) {
       }
     } catch (err) {
       console.log(err);
+      signOut();
     }
   };
 
   const signOut = async () => {
-    await SecureStore.deleteItemAsync('accessToken');
-    await SecureStore.deleteItemAsync('refreshToken');
+    await StorageManager.deleteItemAsync('accessToken');
+    await StorageManager.deleteItemAsync('refreshToken');
     setUser(null);
   };
 

@@ -1,5 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
-import * as SecureStore from 'expo-secure-store';
+import StorageManager from '@/utils/storageManager';
 import { BASE_PATH, API_VERSION } from '@/api/config';
 
 class AuthApi {
@@ -64,7 +64,7 @@ class AuthApi {
     const url = `${BASE_PATH}/${API_VERSION}/refresh-access-token`;
 
     try {
-      const refreshToken = await SecureStore.getItemAsync('refreshToken');
+      const refreshToken = await StorageManager.getItemAsync('refreshToken');
 
       const payload = {
         REFRESH_TOKEN: refreshToken,
@@ -82,19 +82,21 @@ class AuthApi {
       if (response.status !== 200) {
         throw tokens;
       }
-      await SecureStore.setItemAsync('accessToken', tokens.accessToken);
-      await SecureStore.setItemAsync('refreshToken', tokens.refreshToken);
+      await StorageManager.setItemAsync('accessToken', tokens.accessToken);
+      await StorageManager.setItemAsync('refreshToken', tokens.refreshToken);
       return tokens;
     } catch (error) {
       console.log(error);
-      await SecureStore.deleteItemAsync('accessToken');
-      await SecureStore.deleteItemAsync('refreshToken');
+      await StorageManager.deleteItemAsync('accessToken');
+      await StorageManager.deleteItemAsync('refreshToken');
       return error;
     }
   }
 
   static async changePassword(payload) {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    )
       await AuthApi.refreshAccessToken();
     const url = `${BASE_PATH}/${API_VERSION}/user/change-password`;
 
@@ -102,7 +104,7 @@ class AuthApi {
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
       body: JSON.stringify(payload),
     });

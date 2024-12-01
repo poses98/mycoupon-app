@@ -1,17 +1,19 @@
 import { BASE_PATH, API_VERSION } from '@/api/config';
-import * as SecureStore from 'expo-secure-store';
+import StorageManager from '@/utils/storageManager';
 import AuthApi from './AuthApi';
 
 class RestaurantApi {
   static async getRestaurants() {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    )
       await AuthApi.refreshAccessToken();
     const url = `${BASE_PATH}/${API_VERSION}/user/restaurants`;
     const request = new Request(url, {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
     });
 
@@ -24,14 +26,16 @@ class RestaurantApi {
   }
 
   static async setPassword(password, restaurantId) {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    )
       await AuthApi.refreshAccessToken();
     const url = `${BASE_PATH}/${API_VERSION}/set-restaurant-password/`;
     const request = new Request(url, {
       method: 'PUT',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
       body: JSON.stringify({
         newPassword: password,
@@ -60,14 +64,16 @@ class RestaurantApi {
   }
 
   static async updateRestaurant(restaurantId, formData) {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    )
       await AuthApi.refreshAccessToken();
     const url = `${BASE_PATH}/${API_VERSION}/restaurant/${restaurantId}`;
     const request = new Request(url, {
       method: 'PUT',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
       body: JSON.stringify(formData),
     });

@@ -1,17 +1,19 @@
 import { BASE_PATH, API_VERSION } from '@/api/config';
-import * as SecureStore from 'expo-secure-store';
+import StorageManager from '@/utils/storageManager';
 import AuthApi from './AuthApi';
 
 class CouponApi {
   static async getCoupons() {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    )
       await AuthApi.refreshAccessToken();
     const url = `${BASE_PATH}/${API_VERSION}/coupons`;
     const request = new Request(url, {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
     });
 
@@ -24,14 +26,16 @@ class CouponApi {
   }
 
   static async getCouponById(couponId) {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    )
       await AuthApi.refreshAccessToken();
     const url = `${BASE_PATH}/${API_VERSION}/coupon/${couponId}`;
     const request = new Request(url, {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
     });
 
@@ -47,14 +51,16 @@ class CouponApi {
   }
 
   static async generateBatchCoupons(payload) {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    )
       await AuthApi.refreshAccessToken();
     const url = `${BASE_PATH}/${API_VERSION}/coupon-batch`;
     const request = new Request(url, {
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
       body: JSON.stringify(payload),
     });
@@ -68,7 +74,9 @@ class CouponApi {
   }
 
   static async validateCoupon(payload) {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken'))) {
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    ) {
       await AuthApi.refreshAccessToken();
     }
 
@@ -77,7 +85,7 @@ class CouponApi {
       method: 'PUT',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
       body: JSON.stringify(payload),
     });
@@ -111,7 +119,9 @@ class CouponApi {
   }
 
   static async setSharedCoupon(payload) {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken'))) {
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    ) {
       await AuthApi.refreshAccessToken();
     }
     const url = `${BASE_PATH}/${API_VERSION}/set-shared-coupon`;
@@ -119,7 +129,7 @@ class CouponApi {
       method: 'PUT',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
       body: JSON.stringify(payload),
     });
@@ -142,14 +152,16 @@ class CouponApi {
   }
 
   static async getCouponsValidatedBy() {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    )
       await AuthApi.refreshAccessToken();
     const url = `${BASE_PATH}/${API_VERSION}/validated-by-coupons`;
     const request = new Request(url, {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
     });
 
@@ -171,14 +183,16 @@ class CouponApi {
   }
 
   static async getValidatedCouponsByRestaurant(restaurantId) {
-    if (AuthApi.isTokenExpired(await SecureStore.getItemAsync('accessToken')))
+    if (
+      AuthApi.isTokenExpired(await StorageManager.getItemAsync('accessToken'))
+    )
       await AuthApi.refreshAccessToken();
     const url = `${BASE_PATH}/${API_VERSION}/coupons-by-restaurant/${restaurantId}`;
     const request = new Request(url, {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `${await SecureStore.getItemAsync('accessToken')}`,
+        Authorization: `${await StorageManager.getItemAsync('accessToken')}`,
       }),
     });
 
