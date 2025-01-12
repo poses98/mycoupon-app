@@ -7,3 +7,5 @@ Welcome to the Coupon App with QR Scanner! This project is built using [Expo](ht
 The project was migrated to React web as there was going to be a little amount of users and deploying to app stores was not worthy.
 
 Feel free to dive into the codebase that I made, although it is not a finished or maintened project.
+
+The tests at that point of development are totally missing.
